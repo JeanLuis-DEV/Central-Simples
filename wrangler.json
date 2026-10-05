@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "central-simples",
+  "account_id": "38d9280689f97dc0bceca08c3ee94507",
+  "compatibility_date": "2026-05-15",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "centralsimples.com.br", "custom_domain": true },
+    { "pattern": "www.centralsimples.com.br", "custom_domain": true }
+  ]
+}

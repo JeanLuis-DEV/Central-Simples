@@ -33,3 +33,11 @@ pnpm test:browser
 A validação de navegador exige a Central ativa e Google Chrome instalado no caminho configurado em `tests/browser.mjs`. Capturas ficam em `artifacts/`.
 
 Detalhes, arquivos e próximos pontos: [docs/PROTOTIPO.md](docs/PROTOTIPO.md).
+
+## Estrutura oficial
+
+Hospedagem, confirmação dos contatos, teste sem cartão e integração Mercado Pago: [docs/ESTRUTURA-OFICIAL.md](docs/ESTRUTURA-OFICIAL.md).
+
+## Publicação oficial
+
+Publicado em https://centralsimples.com.br. Recursos, comandos e homologações pendentes: [implantação Cloudflare](docs/IMPLANTACAO-CLOUDFLARE.md).

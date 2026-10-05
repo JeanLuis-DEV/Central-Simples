@@ -10,23 +10,26 @@
     "start:lan": "next start --hostname 0.0.0.0 --port 5190",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test:browser": "node tests/browser.mjs"
+    "test:browser": "node tests/browser.mjs",
+    "build:cloudflare": "node scripts/build-cloudflare.mjs",
+    "deploy:cloudflare": "wrangler deploy"
   },
   "dependencies": {
-    "next": "16.3.4",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
     "lucide-react": "1.31.0",
-    "radix-ui": "1.6.7"
+    "next": "16.3.4",
+    "radix-ui": "1.6.7",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "eslint": "9.39.4",
     "eslint-config-next": "16.3.4",
-    "playwright": "1.62.1"
+    "playwright": "1.62.1",
+    "typescript": "5.9.3",
+    "wrangler": "4.92.0"
   },
   "engines": {
     "node": ">=22.13.0"
