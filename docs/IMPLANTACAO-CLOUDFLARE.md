@@ -39,7 +39,7 @@ Nos três projetos: `pnpm build:cloudflare`, depois `pnpm deploy:cloudflare`. No
 - Verificação de ausência das credenciais privadas existentes nos pacotes compilados dos apps.
 - HTTP 200 nos sites; `/api/auth/session` retorna `user: null` sem sessão.
 - POST de login inválido retorna HTTP 401 nos dois apps, usando o hash scrypt existente e os bancos D1 reais.
-- Webhooks sem configuração do Mercado Pago retornam HTTP 503 e não criam contas.
+- Antes da configuração, webhooks retornavam HTTP 503. Após configurar os secrets: notificações sem assinatura retornam HTTP 401; uma assinatura correta para pagamento inexistente retorna HTTP 503 ao consultar o provedor, sem ativar conta.
 - Finorya: 96 testes unitários aprovados; checagem de tipos aprovada nos dois apps.
 - Visualização da Central no domínio oficial conferida em Chrome.
 
@@ -47,11 +47,11 @@ Esses testes não homologam login válido, entrega externa de códigos, pagament
 
 ## Pendências para liberar cadastro e compra
 
-1. Mercado Pago exige validação adicional de identidade na conta do titular antes de criar a aplicação. A aba ficou aberta para a conclusão pelo usuário.
-2. Criar e homologar aplicações e credenciais por app, Checkout Pro e webhooks:
+1. Validação de identidade concluída. Aplicações Checkout Pro/Preferences criadas: Finorya `3439386659351205` e Ajudante Elétrico `4485062641751185`. Os termos foram autorizados pelo titular.
+2. Webhooks de teste e produção salvos no painel de cada aplicação, com o evento Pagamentos (legacy):
    - https://finorya.centralsimples.com.br/api/payments/webhook
    - https://ajudante.centralsimples.com.br/api/payments/webhook
-3. Registrar `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET` e `MERCADOPAGO_SELLER_ID` no Worker correspondente. `MERCADOPAGO_SANDBOX=true` permanece até a homologação; mudar para produção somente com credenciais corretas e pagamento real validado.
+3. `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET` e `MERCADOPAGO_SELLER_ID` registrados como secrets no Worker correspondente. Credenciais obtidas na seção Teste; `/users/me` confirmou contas vendedoras de teste. O token exibido nessa seção começa com APP_USR: o prefixo isolado não identifica o ambiente. `MERCADOPAGO_SANDBOX=true` permanece. Credenciais produtivas e cobrança real ainda não foram ativadas.
 4. Configurar Twilio Verify, canal WhatsApp e SendGrid, autenticação de remetente/DKIM, suporte a CustomCode e entrega real dos dois códigos. Não há credenciais desses provedores nos Workers.
 5. O DNS existente tem MX nulo (`.`), SPF `v=spf1 -all` e DMARC `p=reject`. Eles foram preservados. O provedor de e-mail deve fornecer os registros corretos de domínio/subdomínio de envio; não remover a proteção DMARC para mascarar falta de configuração.
 6. Enquanto os provedores estiverem ausentes, novos cadastros e compras permanecem bloqueados. Nenhuma conta paga foi criada e nenhum pagamento foi cobrado. O teste mantém 168 horas sem cartão após cadastro verificado.
