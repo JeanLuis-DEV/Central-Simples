@@ -15,7 +15,9 @@ Atualização: 05/10/2026.
 
 O cliente OAuth do projeto Google Cloud `prefab-clover-510801-h2` foi criado e autorizado pela conta remetente. Renovação de acesso e recebimento de um e-mail real de teste foram confirmados. A configuração foi confirmada como Em produção após autorização explícita do proprietário. Novo consentimento de envio foi concluído pelo titular em 05/10/2026 às 22:50 e o token de produção renovou o acesso com sucesso, com somente gmail.send. A página inicial e o domínio autorizado foram salvos; os links públicos de privacidade e termos foram salvos no branding.
 
-A análise de marca retornou: página inicial não registrada para a conta remetente. A propriedade https://centralsimples.com.br/ foi preparada no Search Console e sua metatag foi adicionada localmente em app/page.tsx; a compilação passou. Essa comprovação ainda não foi publicada nem confirmada e aguarda autorização do proprietário. Depois da confirmação, o Google pede aguardar 24 horas antes de repetir a análise. A verificação do escopo sensível continua sinalizada como pendente. Não adicionar links fictícios nem considerar o token de testes permanente.
+A comprovação de propriedade foi autorizada, publicada e confirmada em 05/10/2026 às 22:56 (America/Sao_Paulo). O Search Console exibiu **Propriedade verificada**, com método **Tag HTML**, para https://centralsimples.com.br/ na conta jeanluis.dev@gmail.com. A metatag fica em app/page.tsx e precisa permanecer publicada para preservar a comprovação. Compilação e TypeScript passaram, e a página pública respondeu HTTP 200 com a metatag esperada. Versão Cloudflare: 9827a88c-eb09-4a4a-ab2a-ab09bda55815.
+
+A análise OAuth anterior pediu aguardar 24 horas após a comprovação antes de repetir a verificação de marca: tentar novamente a partir de **06/10/2026 às 22:56 (America/Sao_Paulo)**. A marca e o escopo sensível ainda não foram aprovados pelo Google. Não adicionar links fictícios nem considerar o token de testes permanente.
 
 O envio ainda não está integrado aos fluxos dos aplicativos. Os segredos estão restritos ao computador do proprietário, fora dos repositórios; não devem ser documentados ou publicados.
 
