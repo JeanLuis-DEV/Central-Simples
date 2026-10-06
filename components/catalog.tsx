@@ -273,6 +273,8 @@ export default function Catalog() {
         <div>
           <a href="#aplicativos">Aplicativos</a>
           <a href="#sobre">Sobre a Central</a>
+          <a href="/privacidade">Privacidade</a>
+          <a href="/termos">Termos de uso</a>
           <button
             onClick={() => {
               rememberTrigger();
