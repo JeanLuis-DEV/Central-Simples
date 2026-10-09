@@ -1,4 +1,4 @@
-# Google OAuth: marca aprovada e preparação do escopo — 09/10/2026
+# Google OAuth: marca aprovada e escopo em análise — 09/10/2026
 
 ## Resultado confirmado no painel
 
@@ -12,13 +12,17 @@ Conta: `jeanluis.dev@gmail.com`. Projeto: `prefab-clover-510801-h2`, Central Sim
 - Público-alvo conferido: Externo, **Em produção**, um usuário OAuth autorizado. Não voltou ao modo de teste.
 - A renovação de acesso com a credencial existente passou e retornou somente `https://www.googleapis.com/auth/gmail.send`, com validade de acesso de 3599 segundos. O refresh token foi preservado; nenhum e-mail enviado nesta conferência.
 
-## Escopo: bloqueio restante real
+## Escopo: solicitação enviada e em análise
 
-`gmail.send` ainda não foi verificado. Após publicar a marca, **Prepare for verification** ficou disponível. No resumo, Google bloqueia Confirmar por dois campos obrigatórios: justificativa e vídeo de demonstração.
+O proprietário publicou o vídeo [Google Verification](https://youtu.be/KqIX2rfhkD0), conferido como **Não listado**, com 6 minutos e 6 segundos. A gravação mostra o consentimento OAuth em inglês e os fluxos de cadastro com confirmação por e-mail nos dois apps. Link e justificativa de 859 caracteres foram salvos em Acesso a dados; o Google confirmou a persistência das mudanças.
 
-Justificativa preparada com 859 caracteres e preenchida na tela de Acesso a dados. O botão Save permanece desabilitado enquanto o link do vídeo está vazio; portanto **o texto está preparado, mas ainda não foi salvo no Google e o pedido de análise não foi enviado**. A aba foi mantida aberta para continuação.
+O formulário final recebeu informações adicionais sobre o remetente, cliente compartilhado, fluxos públicos e política de privacidade. O proprietário marcou as declarações do questionário e autorizou confirmar. Conferidas quatro respostas **Não**: o app não é apenas pessoal, interno, de desenvolvimento/teste nem um plug-in WordPress SMTP. A declaração CASA é condicional à solicitação de escopos restritos; esta solicitação contém somente o escopo sensível `gmail.send`.
 
-O proprietário informou que ainda não tem o vídeo. Não foi inserido link fictício nem enviado material que não demonstre o funcionamento real. Aprovar a marca não equivale a aprovar o escopo.
+Acionado **Enviar para verificação** em 09/10/2026. A Central de verificação exibiu **O acesso aos dados do seu app está em análise.** A marca permanece aprovada e publicada; **o escopo ainda não foi aprovado**.
+
+Ponto de atenção informado ao proprietário antes do envio: a gravação reaproveita a autorização anterior e não abre o detalhe **See the 1 service**. Os requisitos oficiais pedem exibir as permissões exatas. O Google pode solicitar um complemento mostrando a permissão de envio Gmail em inglês; nenhuma exigência adicional foi exibida no momento do envio.
+
+O consentimento de gravação foi concluído pelo proprietário em 09/10/2026 às 16:19:51 (America/Sao_Paulo), com `gmail.send`. O auxiliar confirmou arquivos de credenciais inalterados e descartou o acesso temporário; não salvou refresh token, não enviou mensagens e não modificou a implantação produtiva.
 
 ## Justificativa pronta
 
@@ -38,17 +42,16 @@ A gravação deve ser do fluxo real, não uma montagem apresentada como autoriza
 
 O script de autorização existente fica em `scripts/authorize-gmail.mjs` dos dois apps e usa retorno `http://localhost:8080/oauth2/callback`. Ele preserva a credencial atual e só inicia renovação planejada com `--renew`. Não executado nesta etapa: preparar a gravação não exige trocar credenciais produtivas.
 
-## Depois de receber o link
+## Acompanhamento pendente
 
-1. Conferir o vídeo e seu acesso não listado.
-2. Preencher o link em Acesso a dados, salvar e conferir a persistência da justificativa/link.
-3. Retornar à Central de verificação, completar as informações adicionais e enviar o pedido. Se aparecer aceite de termos ou outra ação que exija confirmação específica, apresentar o formulário completo ao proprietário antes desse aceite.
-4. Conferir o status efetivo retornado pelo Google. **Em análise** não significa aprovado; registrar eventual exigência adicional e a aprovação somente quando exibida.
-5. Manter as credenciais atuais e os apps operando com o escopo existente. Não adicionar escopos de leitura, contatos, exclusão ou Gmail completo.
+1. Aguardar a resposta da análise na conta de contato `jeanluis.dev@gmail.com` e na Central de verificação do projeto.
+2. Se o Google solicitar complemento, mostrar o detalhe da permissão Gmail na tela de consentimento em inglês, preservando as credenciais existentes.
+3. Registrar a aprovação somente quando confirmada pelo Google. **Em análise** não significa aprovado.
+4. Manter os apps operando com as credenciais e o escopo existentes. Não adicionar leitura, contatos, exclusão ou Gmail completo.
 
 ## Evidências e arquivos
 
-Screenshots locais no projeto Central Simples, fora do Git, em `artifacts/google-oauth-2026-10-09/`: marca publicada, justificativa preparada e status final da Central de verificação. Nos projetos de referência, somente documentação foi alterada; nenhum código, banco, deploy Cloudflare ou credencial foi modificado.
+Screenshots locais no projeto Central Simples, fora do Git, em `artifacts/google-oauth-2026-10-09/`: marca publicada, `video-e-justificativa-salvos.jpg` e `escopo-gmail-em-analise.jpg`. Nos três projetos, somente documentação foi alterada nesta etapa; nenhum código, banco, deploy Cloudflare ou credencial foi modificado.
 
 ## Fontes oficiais
 
