@@ -22,6 +22,19 @@ As mudanças locais de administração centralizada, inclusão do Lingua Memory,
 - Lingua Memory contém somente a nova nota documental de remoção do WhatsApp; seu runtime não foi alterado nesta etapa.
 - Arquivos candidatos conferidos para credenciais e temporários; o único literal sinalizado foi a chave sintética explícita do novo teste.
 
-## Limite de publicação
+## Publicação posterior na Cloudflare — concluída em 08/10/2026
 
-Esta etapa salva e envia o código ao GitHub. A correção de assinatura do Worker da Central ainda precisa ser publicada na Cloudflare e validada com uma sessão administrativa válida. Nenhum Worker, banco, chave, cobrança ou configuração de provedor foi alterado nesta etapa.
+O envio inicial ao GitHub não publicou o Worker. Após solicitação do proprietário, a correção do commit `ba4613e0acaa5707f86beed60530deefed50e263` foi publicada no Worker `central-simples`, conta Cloudflare existente de `jeanluis.dev@gmail.com`, versão `f7035b1e-f195-43fd-9880-61a886cba9b2`. A consulta posterior de deployments confirmou essa versão ativa com 100% do tráfego.
+
+Comandos executados: `pnpm build:cloudflare`, `pnpm test:worker` e `pnpm exec wrangler deploy --keep-vars`. Compilação e quatro testes aprovados. A publicação preservou as variáveis e os quatro segredos administrativos/de integração existentes, sem recriar ou rotacionar credenciais.
+
+Verificação HTTPS real em https://centralsimples.com.br:
+
+- Página principal, `/area-restrita`, `/termos` e `/privacidade`: HTTP 200.
+- `/api/central/apps`: HTTP 200, com os três aplicativos configurados e disponíveis.
+- Consulta de contas sem sessão: HTTP 401.
+- Login com a credencial administrativa local existente: HTTP 200; não foi necessário redefini-la.
+- Consultas assinadas de contas do Ajudante, Finorya e Lingua Memory pela Central: HTTP 200 e listas válidas nos três destinos. Isso confirma o contrato HMAC hexadecimal entre o Worker publicado e os receptores reais.
+- Logout da sessão usada na conferência: HTTP 200.
+
+As verificações externas foram somente de leitura, login e logout. Não foram criadas, editadas ou excluídas contas, nem alterados bancos, cobranças ou configurações de outros provedores. Dados pessoais das listas e credenciais não foram exibidos nem incluídos no relatório.

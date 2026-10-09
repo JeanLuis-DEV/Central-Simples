@@ -1,5 +1,7 @@
 # Implantação oficial — 05/10/2026
 
+> Publicação de 08/10/2026: correção da assinatura de integração ativa na versão `f7035b1e-f195-43fd-9880-61a886cba9b2`. Login administrativo e consulta assinada de contas dos três apps aprovados em produção. Evidências em [REVISAO-PRE-COMMIT-2026-10-08.md](REVISAO-PRE-COMMIT-2026-10-08.md).
+
 > Homologação de 08/10/2026: cadastro, recuperação e etapa de e-mail da compra aprovados no Ajudante e Finorya, com oito códigos recebidos, expiração natural, reenvio e limpeza concluídos. Resultados e limites: [HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md](HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md).
 
 ## Publicado
