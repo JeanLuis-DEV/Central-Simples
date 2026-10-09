@@ -19,7 +19,7 @@ Com computador e celular na mesma rede Wi-Fi, execute `pnpm start:lan` após `pn
 
 ## Endereços dos aplicativos
 
-Copie `.env.example` para `.env.local` e ajuste os endereços públicos. O protótipo usa Finorya na porta 5180 e Ajudante Elétrico na porta 5173. Os aplicativos precisam estar ativos para seus links de acesso funcionarem. Alterações nessas variáveis exigem uma nova compilação em produção.
+Copie `.env.example` para `.env.local` e ajuste os endereços públicos. O catálogo usa Finorya na porta 5180, Ajudante Elétrico na porta 5173 e Lingua Memory na porta 5200. Os aplicativos precisam estar ativos para seus links de acesso funcionarem. Alterações nessas variáveis exigem uma nova compilação em produção. Configure `NEXT_PUBLIC_LINGUA_MEMORY_URL` com o endereço público depois da publicação do Lingua Memory.
 
 ## Validar
 
@@ -40,4 +40,10 @@ Hospedagem, confirmação dos contatos, teste sem cartão e integração Mercado
 
 ## Publicação oficial
 
-Publicado em https://centralsimples.com.br. Recursos, comandos e homologações pendentes: [implantação Cloudflare](docs/IMPLANTACAO-CLOUDFLARE.md).
+Publicado em https://centralsimples.com.br. A administração fica em
+`/area-restrita`; ela cria, consulta, suspende e exclui contas dos aplicativos
+por endpoints internos assinados. O Lingua Memory aparece no catálogo, mas a
+integração de contas fica pendente até a migração do seu SQLite e dos áudios
+para uma hospedagem persistente. Recursos, comandos e homologações pendentes:
+[implantação Cloudflare](docs/IMPLANTACAO-CLOUDFLARE.md) e
+[administração central](docs/CENTRAL-ADMIN.md).

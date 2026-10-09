@@ -1,15 +1,17 @@
 # Estrutura oficial: hospedagem, cadastro e cobrança
 
-Status: sites publicados no Cloudflare e domínios ativos em 05/10/2026. Cadastros com códigos e cobrança aguardam provedores. Consulte IMPLANTACAO-CLOUDFLARE.md para os recursos, comandos, validações e pendências atuais.
+> Homologação de 08/10/2026: cadastro, recuperação e etapa de e-mail da compra aprovados nas APIs produtivas do Ajudante e Finorya. Oito códigos recebidos; expiração, reenvio e limpeza concluídos. Evidências e limites em [HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md](HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md). Esta atualização substitui as notas antigas de entrega pendente.
+
+Status: sites publicados no Cloudflare e domínios ativos. O cadastro e a recuperação dos aplicativos usam somente código por e-mail; a confirmação por WhatsApp foi removida. Consulte IMPLANTACAO-CLOUDFLARE.md para os recursos, comandos, validações e pendências atuais.
 
 ## Endereços oficiais
-- Central: https://www.centralsimples.com.br — catálogo.
+- Central: https://www.centralsimples.com.br — catálogo e administração centralizada.
 - Finorya: https://finorya.centralsimples.com.br — landing, login e aplicativo.
 - Ajudante Elétrico: https://ajudante.centralsimples.com.br — landing, login e aplicativo.
-- Cada app mantém banco, usuários, chave de criptografia, configuração de verificação e pedidos próprios. O catálogo não recebe senhas, pagamentos ou acesso administrativo.
+- Cada app mantém banco, usuários, chave de criptografia, configuração de verificação e pedidos próprios. A Central recebe apenas solicitações administrativas assinadas; senhas continuam no app escolhido.
 
 ## Hospedagem inicial
-A Central foi publicada em Workers Static Assets no plano gratuito, com exportação estática out. A criação no Pages retornou erro 8000000. Os comandos de publicação estão em IMPLANTACAO-CLOUDFLARE.md.
+A Central foi publicada em Workers Static Assets no plano gratuito, com exportação estática out e Worker para `/api/central/*`. A criação no Pages retornou erro 8000000. Os comandos de publicação estão em IMPLANTACAO-CLOUDFLARE.md.
 
 O Ajudante foi publicado em Workers com banco D1 exclusivo, migrações até 0008 e secrets próprios. Os bancos locais permanecem separados.
 
@@ -23,29 +25,23 @@ Fontes:
 - https://developers.cloudflare.com/workers/platform/limits/
 - https://developers.cloudflare.com/d1/platform/pricing/
 
-## E-mail e WhatsApp com códigos
-Os dois apps já exigem confirmação dos dois contatos antes do cadastro público, incluindo o fluxo pago novo. Não há código universal nem ativação quando o provedor está ausente.
-1. Criar a conta Twilio e um Verify Service com e-mail e WhatsApp habilitados.
-2. Criar API Key e configurar TWILIO_API_KEY_SID, TWILIO_API_KEY_SECRET e TWILIO_VERIFY_SERVICE_SID como secrets do app.
-3. No SendGrid, autenticar um domínio de envio, cadastrar remetente, configurar DNS indicado pelo provedor (SPF/DKIM) e template de código; associar essa configuração ao canal de e-mail do Verify.
-4. Ativar suporte a CustomCode no Verify, pois o adaptador atual envia o código próprio. Confirmar a disponibilidade dessa configuração com o provedor.
-5. Configurar o remetente WhatsApp/conta empresarial e concluir os requisitos do Twilio Verify para esse canal. Homologar destino brasileiro em formato E.164 (+55 + DDD + número). Não tratar sandbox como envio público de produção.
-6. Testar entrega real de e-mail e WhatsApp, código incorreto, vencimento e reenvio. Os testes automáticos locais usam provedores simulados e não validam a entrega externa.
-7. Manter USER_PASSWORD_ENCRYPTION_KEY existente. Trocar essa chave sem migração compromete senhas cifradas e consultas por CPF.
+## Códigos por e-mail
+Os dois apps exigem confirmação do e-mail antes do cadastro público, inclusive no fluxo pago novo. Não há código universal nem ativação quando o Gmail está ausente.
+1. Gmail configurado nos dois aplicativos com remetente autenticado.
+2. Recebimento real confirmado no cadastro, recuperação e etapa de e-mail da compra em 08/10, incluindo expiração natural e reenvio, conforme relatório acima. Os testes locais com provedores simulados são evidência separada.
+3. Manter USER_PASSWORD_ENCRYPTION_KEY existente. Trocar essa chave sem migração compromete senhas cifradas e consultas por CPF.
 
 Fontes:
-- https://www.twilio.com/docs/verify/email
-- https://www.twilio.com/docs/verify/whatsapp
-- https://www.twilio.com/docs/verify/api/verification
+- https://developers.google.com/gmail/api/guides/sending
 
 ## Teste gratuito
 Permanece com 168 horas de acesso completo, sem cartão, sem cobrança e sem assinatura automática. O servidor bloqueia o acesso após o prazo. A compra é uma ação separada. O pagamento de uma conta de teste converte a conta existente, preservando dados e senha.
 
 ## Mercado Pago Checkout Pro
 Implantado nos dois apps:
-- Botão Finalizar a compra substitui o envio de dados ao WhatsApp.
-- Cadastro novo: dados → códigos dos dois contatos → checkout → webhook/API confirma approved → conta e workspace são criados atomicamente e aparecem na Área Restrita.
-- Conta já cadastrada com contatos verificados: dados e senha devem corresponder à conta existente; o pagamento converte/renova essa conta, sem criar outra.
+- Botão Finalizar a compra substitui o envio de dados por mensagem externa.
+- Cadastro novo: dados → código por e-mail → checkout → webhook/API confirma approved → conta e workspace são criados atomicamente e ficam disponíveis na Central Simples.
+- Conta já cadastrada com e-mail verificado: dados e senha devem corresponder à conta existente; o pagamento converte/renova essa conta, sem criar outra.
 - Senha e CPF não são enviados ao Mercado Pago; a senha fica somente como hash e cifra no servidor. O pedido guarda temporariamente os dados verificados necessários à ativação e apaga o snapshot após ativar.
 - Preços e validade são definidos no servidor; nenhuma informação de retorno do navegador libera acesso.
 - Webhook exige HMAC válido e consulta GET /v1/payments/{id}. Confere vendedor, moeda BRL, ambiente e valor em centavos. Transações repetidas não duplicam usuário nem estendem a licença outra vez.
@@ -103,4 +99,4 @@ Referência do Fundador: R$358,80; economia R$281,80. O preço de R$77,00 foi de
 
 ## Validação local
 
-Finorya: 96 testes unitários, fluxos Chrome desktop/mobile e fluxo HTTP de compra com provedores simulados. Ajudante: Worker/D1 efêmero com confirmação assinada, cadastro na Área Restrita, idempotência, valor adulterado e estorno; regressão de autenticação e verificação aprovada. Builds de produção dos três projetos aprovadas. A Central gerou exportação estática out. Hospedagem e domínio foram ativados. Provedores externos de pagamento e códigos ainda não foram homologados; veja IMPLANTACAO-CLOUDFLARE.md.
+Finorya: 96 testes unitários, fluxos Chrome desktop/mobile e fluxo HTTP de compra com provedores simulados. Ajudante: Worker/D1 efêmero com confirmação assinada, criação de conta integrada à Central, idempotência, valor adulterado e estorno; regressão de autenticação e verificação aprovada. Builds de produção dos três projetos aprovadas. A Central gerou exportação estática e Worker de administração. Hospedagem e domínio foram ativados. Provedores externos de pagamento e códigos ainda não foram homologados; veja IMPLANTACAO-CLOUDFLARE.md.

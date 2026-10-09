@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:browser": "node tests/browser.mjs",
+    "test:worker": "node --experimental-transform-types --test tests/central-worker.test.mjs",
     "build:cloudflare": "node scripts/build-cloudflare.mjs",
     "deploy:cloudflare": "wrangler deploy"
   },

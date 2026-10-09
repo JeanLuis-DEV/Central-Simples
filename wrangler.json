@@ -1,12 +1,20 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "central-simples",
+  "main": "./worker.ts",
   "account_id": "38d9280689f97dc0bceca08c3ee94507",
   "compatibility_date": "2026-05-15",
   "workers_dev": true,
   "assets": {
     "directory": "./out",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "AJUDANTE_APP_URL": "https://ajudante.centralsimples.com.br",
+    "FINORYA_APP_URL": "https://finorya.centralsimples.com.br",
+    "LINGUA_MEMORY_APP_URL": "https://lingua-memory.centralsimples.com.br"
   },
   "routes": [
     { "pattern": "centralsimples.com.br", "custom_domain": true },

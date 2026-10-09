@@ -27,7 +27,7 @@ export default function TermsPage() {
       </section>
       <section>
         <h2>5. Recuperação de acesso e privacidade</h2>
-        <p>A recuperação de acesso depende da conferência dos dados e das verificações de identidade exigidas pelo serviço. Perda de acesso ao e-mail ou WhatsApp deve ser encaminhada ao suporte; esse pedido não cria uma nova senha nem libera a conta automaticamente.</p>
+        <p>A recuperação de acesso depende da conferência dos dados e das verificações de identidade exigidas pelo serviço. Perda de acesso ao e-mail deve ser encaminhada ao suporte; esse pedido não cria uma nova senha nem libera a conta automaticamente.</p>
         <p>O tratamento de dados é descrito na <a href="/privacidade">Política de privacidade</a>. Dúvidas ou solicitações podem ser enviadas para <a href="mailto:jeanluis.dev@gmail.com">jeanluis.dev@gmail.com</a>.</p>
       </section>
     </LegalDocument>

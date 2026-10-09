@@ -5,6 +5,7 @@ import { Dialog } from "radix-ui";
 import {
   ArrowRight,
   ArrowUpRight,
+  BookOpen,
   Check,
   Grid2X2,
   LayoutGrid,
@@ -20,6 +21,8 @@ function AppIcon({ app, small = false }: { app: CatalogApp; small?: boolean }) {
     <span className={`app-icon ${small ? "small" : ""}`} aria-hidden="true">
       {app.id === "finorya" ? (
         "F"
+      ) : app.id === "lingua-memory" ? (
+        <BookOpen size={small ? 18 : 27} strokeWidth={2.2} />
       ) : (
         <Zap size={small ? 18 : 27} fill="currentColor" />
       )}
@@ -44,15 +47,8 @@ export default function Catalog() {
   function rememberTrigger() {
     trigger.current = document.activeElement as HTMLElement | null;
   }
-  // Implementação futura: reativar este estado e a lógica junto com o filtro abaixo.
-  // const [category, setCategory] = useState("Todos");
   const [selected, setSelected] = useState<CatalogApp | null>(null);
   const [access, setAccess] = useState(false);
-  /* Implementação futura: filtro por categoria.
-  const filtered = apps.filter(
-    (app) => category === "Todos" || category === app.category,
-  );
-  */
   return (
     <>
       <a href="#conteudo" className="skip-link">
@@ -64,6 +60,7 @@ export default function Catalog() {
           <nav aria-label="Navegação principal">
             <a href="#aplicativos">Aplicativos</a>
             <a href="#sobre">Sobre a Central</a>
+            <a href="/area-restrita">Administração</a>
           </nav>
           <button
             className="button header-access"
@@ -110,7 +107,7 @@ export default function Catalog() {
           </div>
           <div
             className="hero-visual mobile-showcase"
-            aria-label="Finorya e Ajudante Elétrico no celular"
+            aria-label="Finorya, Ajudante Elétrico e Lingua Memory no celular"
           >
             <div className="visual-glow" aria-hidden="true" />
             {apps.map((app) => (
@@ -150,26 +147,6 @@ export default function Catalog() {
               </h2>
             </div>
           </div>
-          {/* Implementação futura: filtros por categoria. Reativar com o estado e a lógica acima.
-          <div className="catalog-toolbar">
-            <div
-              className="filters"
-              role="group"
-              aria-label="Filtrar por categoria"
-            >
-              {["Todos", "Finanças", "Serviços"].map((item) => (
-                <button
-                  key={item}
-                  aria-pressed={category === item}
-                  onClick={() => setCategory(item)}
-                >
-                  {item}
-                  {item === "Todos" && <span>{apps.length}</span>}
-                </button>
-              ))}
-            </div>
-          </div>
-          */}
           <div className="app-grid" aria-label="Catálogo de aplicativos">
             {apps.map((app) => (
               <article className="app-card" key={app.id}>
@@ -273,6 +250,7 @@ export default function Catalog() {
         <div>
           <a href="#aplicativos">Aplicativos</a>
           <a href="#sobre">Sobre a Central</a>
+          <a href="/area-restrita">Administração</a>
           <a href="/privacidade">Privacidade</a>
           <a href="/termos">Termos de uso</a>
           <button
@@ -288,7 +266,7 @@ export default function Catalog() {
       </footer>
       <Dialog.Root
         open={!!selected || access}
-        onOpenChange={(open) => {
+        onOpenChange={(open: boolean) => {
           if (!open) {
             setSelected(null);
             setAccess(false);
@@ -298,7 +276,7 @@ export default function Catalog() {
         <Dialog.Portal>
           <Dialog.Overlay className="dialog-overlay" />
           <Dialog.Content
-            onCloseAutoFocus={(event) => {
+            onCloseAutoFocus={(event: Event) => {
               event.preventDefault();
               trigger.current?.focus();
             }}
@@ -342,7 +320,9 @@ export default function Catalog() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Conhecer planos e teste grátis
+                    {selected.id === "lingua-memory"
+                      ? "Começar a estudar grátis"
+                      : "Conhecer planos e teste grátis"}
                     <ArrowUpRight size={17} />
                   </a>
                   <a

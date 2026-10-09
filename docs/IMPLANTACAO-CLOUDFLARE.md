@@ -1,5 +1,7 @@
 # Implantação oficial — 05/10/2026
 
+> Homologação de 08/10/2026: cadastro, recuperação e etapa de e-mail da compra aprovados no Ajudante e Finorya, com oito códigos recebidos, expiração natural, reenvio e limpeza concluídos. Resultados e limites: [HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md](HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md).
+
 ## Publicado
 
 | Projeto | Endereço oficial | Hospedagem |
@@ -52,7 +54,7 @@ Esses testes não homologam login válido, entrega externa de códigos, pagament
    - https://finorya.centralsimples.com.br/api/payments/webhook
    - https://ajudante.centralsimples.com.br/api/payments/webhook
 3. `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET` e `MERCADOPAGO_SELLER_ID` registrados como secrets no Worker correspondente. Credenciais obtidas na seção Teste; `/users/me` confirmou contas vendedoras de teste. O token exibido nessa seção começa com APP_USR: o prefixo isolado não identifica o ambiente. `MERCADOPAGO_SANDBOX=true` permanece. Credenciais produtivas e cobrança real ainda não foram ativadas.
-4. Configurar Twilio Verify, canal WhatsApp e SendGrid, autenticação de remetente/DKIM, suporte a CustomCode e entrega real dos dois códigos. Não há credenciais desses provedores nos Workers.
+4. Gmail configurado; recebimento real de cadastro, recuperação e etapa de e-mail da compra aprovado em 08/10, incluindo expiração e reenvio. Dados de teste removidos; limites no relatório acima. WhatsApp removido.
 5. O DNS existente tem MX nulo (`.`), SPF `v=spf1 -all` e DMARC `p=reject`. Eles foram preservados. O provedor de e-mail deve fornecer os registros corretos de domínio/subdomínio de envio; não remover a proteção DMARC para mascarar falta de configuração.
 6. Enquanto os provedores estiverem ausentes, novos cadastros e compras permanecem bloqueados. Nenhuma conta paga foi criada e nenhum pagamento foi cobrado. O teste mantém 168 horas sem cartão após cadastro verificado.
 7. Confirmar o login administrativo, homologar cadastro completo, pagamento aprovado/rejeitado, webhook duplicado, renovação de conta, expiração e estorno.

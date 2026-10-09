@@ -5,4 +5,6 @@ artifacts/
 .wrangler/
 *.tsbuildinfo
 .env*
+.dev.vars*
 !.env.example
+outputs/

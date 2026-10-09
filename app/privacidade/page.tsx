@@ -12,12 +12,12 @@ export default function PrivacyPage() {
       </section>
       <section>
         <h2>2. Dados utilizados</h2>
-        <p>O cadastro, a compra e a recuperação de acesso podem utilizar nome, login, e-mail, CPF e telefone/WhatsApp. Os aplicativos também armazenam os registros que você insere: dados financeiros no Finorya e dados de clientes, produtos, serviços, orçamentos, ordens de serviço, fotos e movimentações financeiras no Ajudante Elétrico.</p>
+        <p>O cadastro, a compra e a recuperação de acesso podem utilizar nome, login, e-mail, CPF e telefone. Os aplicativos também armazenam os registros que você insere: dados financeiros no Finorya e dados de clientes, produtos, serviços, orçamentos, ordens de serviço, fotos e movimentações financeiras no Ajudante Elétrico.</p>
         <p>Dados técnicos de sessão, requisições e tentativas de acesso são utilizados para autenticação, funcionamento e proteção contra abuso. Cookies de sessão e armazenamento no dispositivo permitem manter o acesso e os dados locais necessários ao funcionamento e à sincronização.</p>
       </section>
       <section>
         <h2>3. Finalidades e proteção</h2>
-        <p>Os dados são utilizados para prestar o serviço, sincronizar registros entre dispositivos, administrar o acesso contratado, verificar contatos e atender solicitações de suporte. As senhas são verificadas por resumo criptográfico; o administrador não consulta a senha cadastrada. O CPF utilizado na recuperação é comparado por um resumo criptográfico protegido por chave.</p>
+        <p>Os dados são utilizados para prestar o serviço, sincronizar registros entre dispositivos, administrar o acesso contratado, verificar o e-mail de acesso e atender solicitações de suporte. As senhas são verificadas por resumo criptográfico; o administrador não consulta a senha cadastrada. O CPF utilizado na recuperação é comparado por um resumo criptográfico protegido por chave.</p>
         <p>As permissões de conta são verificadas no servidor. Credenciais de serviços externos ficam fora do código público e do navegador dos usuários. Nenhuma medida técnica elimina todos os riscos; mantenha seus dispositivos e credenciais protegidos.</p>
       </section>
       <section>
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
       </section>
       <section>
         <h2>5. Prestadores e atendimento</h2>
-        <p>A Cloudflare fornece hospedagem e armazenamento do serviço. O Mercado Pago processa compras; informações de pagamento são tratadas em seus próprios ambientes. Quando habilitados, os serviços de entrega de e-mail e WhatsApp recebem os dados necessários à mensagem. A ativação de cada integração depende da configuração do respectivo provedor.</p>
+        <p>A Cloudflare fornece hospedagem e armazenamento do serviço. O Mercado Pago processa compras; informações de pagamento são tratadas em seus próprios ambientes. O Gmail configurado em cada aplicativo recebe apenas os dados necessários aos códigos e mensagens de e-mail.</p>
         <p>Ao solicitar recuperação manual, os dados informados no formulário são encaminhados ao suporte em jeanluis.dev@gmail.com. O pedido utiliza somente os dígitos finais do CPF na mensagem de atendimento. A solicitação não concede acesso automaticamente e pode exigir verificações adicionais.</p>
       </section>
       <section>

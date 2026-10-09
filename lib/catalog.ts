@@ -81,5 +81,35 @@ export const apps = [
       "http://127.0.0.1:5173",
     ),
   },
+  {
+    id: "lingua-memory",
+    name: "Lingua Memory",
+    subtitle: "Aprendizado de idiomas",
+    category: "Idiomas",
+    label: "ESTUDO DE IDIOMAS",
+    image: "/apps/lingua-memory.png",
+    mobileImage: "/apps/lingua-memory-mobile.png",
+    mobileScreen: "Visão geral",
+    mobileWidth: 390,
+    mobileHeight: 1111,
+    width: 1440,
+    height: 1066,
+    description:
+      "Transforme frases reais em prática constante e avance no seu ritmo.",
+    detail:
+      "Guarde frases, revise no momento certo e pratique sua pronúncia em um espaço feito para o aprendizado de idiomas.",
+    features: [
+      "Frases e traduções editáveis",
+      "Flashcards com repetição espaçada",
+      "Categorias e níveis de estudo",
+      "Gravações privadas de pronúncia",
+      "Progresso e histórico de revisões",
+      "Exportação e reset dos dados",
+    ],
+    site: productUrl(
+      process.env.NEXT_PUBLIC_LINGUA_MEMORY_URL,
+      "http://127.0.0.1:5200",
+    ),
+  },
 ] as const;
 export type CatalogApp = (typeof apps)[number];
