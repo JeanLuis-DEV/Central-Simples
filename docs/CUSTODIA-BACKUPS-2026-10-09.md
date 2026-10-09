@@ -9,15 +9,37 @@
 
 Os arquivos privados e as evidências não integram o Git. A Central não tem um D1 próprio nessa arquitetura; seu código/configuração estão no repositório e a gestão usa os bancos dos três apps.
 
-## Transferência ainda pendente
+## Google Drive escolhido; transferência ainda pendente
 
-Foi solicitada ao titular a indicação do destino externo das cópias e de um local separado para as chaves. Há uma unidade removível `D:` com rótulo `Backup`, mas ela não foi selecionada como destino pelo titular nesta etapa. **Não há confirmação de cópias/chaves guardadas fora deste computador.** Preparação local não equivale a custódia externa.
+O titular autorizou o Google Drive aberto na conta `jeanluis.dev@gmail.com`. Foi criada a pasta [Central Simples - Backups criptografados](https://drive.google.com/drive/u/1/folders/1VWWb_x-JyKc9o7OdyvCI5zRY8-i8e5a4). O diálogo de compartilhamento mostrou somente o proprietário e acesso geral **Restrito**. O envio do ZIP foi bloqueado pela extensão ChatGPT do Chrome, que exige habilitar **Permitir acesso a URLs de arquivo** em `chrome://extensions` → Detalhes da extensão. **Nenhum arquivo foi enviado nesta tentativa; a custódia externa permanece pendente.**
+
+Há uma unidade removível `D:` com rótulo `Backup`, mas ela não foi selecionada pelo titular. Preparação local e criação de uma pasta no Drive não equivalem a transferência concluída.
 
 Pasta privada preparada mais recente: `%USERPROFILE%/.central-simples/backup-custody/2026-10-09T21-53-26Z-2e7a9f65bc1f4291b7e3ef3278790972/`. Esse pacote contém o snapshot produtivo do Lingua repetido às 18:50:16 e comparado ao anterior: schema e hashes das 13 tabelas, incluindo seis migrações, preservados.
 
 - `backups-criptografados.zip`: somente os snapshots cifrados dos três apps.
 - `chaves-privadas.zip`: três chaves de decifração, arquivo privado **sem criptografia adicional**. Não armazenar/upload junto das cópias nem em pasta compartilhada.
 - `custody-report.json`: inventário, hashes e estado; `OffComputerConfirmed=false` enquanto a transferência das duas partes não for comprovada.
+
+## Chaves no mesmo Google Drive
+
+Use `scripts/protect-backup-keys.ps1` para proteger o ZIP privado antes de seu upload. A janela local solicita uma senha independente, sua confirmação e a confirmação do titular de que a guardou **fora do Google Drive**. Não informar essa senha no chat. Duas pastas na mesma conta não substituem a senha independente.
+
+O formato `.cskeys` usa AES-256-GCM, PBKDF2-HMAC-SHA256 com 600.000 iterações, salt aleatório de 32 bytes, nonce de 12 bytes e tag de 16 bytes. O cabeçalho é autenticado, os parâmetros são fixos e a entrada é limitada a 1 MB. O ZIP precisa conter exatamente as três chaves de 32 bytes; antes de protegê-lo, o conteúdo é comparado ao inventário de custódia. O arquivo cifrado é reaberto e comparado ao ZIP original antes de emitir o relatório verificado. Senha e chave derivada não são gravadas em relatórios, argumentos de processo ou no repositório.
+
+O pacote protegido pode ficar no Drive junto dos backups; **a senha de recuperação deve ficar em um gerenciador de senhas ou cópia física protegida fora dessa conta**. Nunca enviar `chaves-privadas.zip`. O diálogo local foi aberto; a definição de senha e o envio das chaves ainda não foram confirmados.
+
+No PowerShell 7 do Windows:
+
+```powershell
+./scripts/protect-backup-keys.ps1 -InputFile 'CAMINHO_PRIVADO/chaves-privadas.zip'
+# Na recuperação, baixe o .cskeys e obtenha a senha guardada separadamente:
+./scripts/protect-backup-keys.ps1 -Restore -InputFile 'CAMINHO_BAIXADO/chaves-protegidas.cskeys'
+```
+
+A recuperação gera `chaves-recuperadas.zip` em uma nova pasta privada com ACL restrita em `%USERPROFILE%/.central-simples/backup-custody/keys-restored-<UUID>`. Não sobrescreve as chaves atuais. O ZIP recuperado também precisa conter exatamente as três chaves esperadas. O formato binário v1 é: magic ASCII `CSKEYS1` + byte zero (8 bytes), salt (32), nonce (12), tag (16), ciphertext; os primeiros 52 bytes são os dados adicionais autenticados. A senha é codificada em UTF-8, sem normalização.
+
+Validação local: `./scripts/protect-backup-keys.ps1 -SelfTest` passou recuperação, aleatoriedade, senha incorreta, adulteração de magic/salt/nonce/tag/ciphertext e truncamento. Isso valida a proteção; não comprova o upload nem a guarda externa da senha pelo titular.
 
 ## Uso
 
