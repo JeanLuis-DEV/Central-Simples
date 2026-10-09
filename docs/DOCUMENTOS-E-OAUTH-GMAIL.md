@@ -1,5 +1,7 @@
 # Documentos públicos e OAuth Gmail
 
+> Atualização de 09/10/2026: marca OAuth verificada e publicada pelo Google. O escopo gmail.send ainda não foi enviado à análise: falta o vídeo obrigatório do YouTube. Justificativa preparada e renovação de acesso existente validada. Detalhes e roteiro: [verificação Google OAuth](VERIFICACAO-GOOGLE-OAUTH-2026-10-09.md).
+
 Atualização: 05/10/2026.
 
 ## Preparado localmente
