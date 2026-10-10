@@ -1,14 +1,17 @@
 # Estrutura oficial: hospedagem, cadastro e cobrança
 
+> Revisão de 09/10/2026: configurações vigentes e pendências em [STATUS-OPERACIONAL.md](STATUS-OPERACIONAL.md). Os registros de implantação/testes ao final são históricos.
+
 > Homologação de 08/10/2026: cadastro, recuperação e etapa de e-mail da compra aprovados nas APIs produtivas do Ajudante e Finorya. Oito códigos recebidos; expiração, reenvio e limpeza concluídos. Evidências e limites em [HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md](HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md). Esta atualização substitui as notas antigas de entrega pendente.
 
 Status: sites publicados no Cloudflare e domínios ativos. O cadastro e a recuperação dos aplicativos usam somente código por e-mail; a confirmação por WhatsApp foi removida. Consulte IMPLANTACAO-CLOUDFLARE.md para os recursos, comandos, validações e pendências atuais.
 
 ## Endereços oficiais
-- Central: https://www.centralsimples.com.br — catálogo e administração centralizada.
+- Central: https://centralsimples.com.br — catálogo e administração centralizada.
 - Finorya: https://finorya.centralsimples.com.br — landing, login e aplicativo.
 - Ajudante Elétrico: https://ajudante.centralsimples.com.br — landing, login e aplicativo.
-- Cada app mantém banco, usuários, chave de criptografia, configuração de verificação e pedidos próprios. A Central recebe apenas solicitações administrativas assinadas; senhas continuam no app escolhido.
+- Lingua Memory: https://lingua-memory.centralsimples.com.br — Worker padrão, D1 e R2 privado; cadastro direto sem códigos.
+- Cada app mantém banco, usuários e credenciais próprios; Finorya e Ajudante mantêm suas verificações e pedidos de compra. A Central recebe apenas solicitações administrativas assinadas; senhas continuam no app escolhido.
 
 ## Hospedagem inicial
 A Central foi publicada em Workers Static Assets no plano gratuito, com exportação estática out e Worker para `/api/central/*`. A criação no Pages retornou erro 8000000. Os comandos de publicação estão em IMPLANTACAO-CLOUDFLARE.md.
@@ -29,7 +32,7 @@ Fontes:
 Os dois apps exigem confirmação do e-mail antes do cadastro público, inclusive no fluxo pago novo. Não há código universal nem ativação quando o Gmail está ausente.
 1. Gmail configurado nos dois aplicativos com remetente autenticado.
 2. Recebimento real confirmado no cadastro, recuperação e etapa de e-mail da compra em 08/10, incluindo expiração natural e reenvio, conforme relatório acima. Os testes locais com provedores simulados são evidência separada.
-3. Manter USER_PASSWORD_ENCRYPTION_KEY existente. Trocar essa chave sem migração compromete senhas cifradas e consultas por CPF.
+3. Manter USER_PASSWORD_ENCRYPTION_KEY existente. Trocar essa chave sem migração compromete consultas por CPF e a validação HMAC dos processos existentes; as senhas ativas são armazenadas somente como hash.
 
 Fontes:
 - https://developers.google.com/gmail/api/guides/sending
@@ -42,7 +45,7 @@ Implantado nos dois apps:
 - Botão Finalizar a compra substitui o envio de dados por mensagem externa.
 - Cadastro novo: dados → código por e-mail → checkout → webhook/API confirma approved → conta e workspace são criados atomicamente e ficam disponíveis na Central Simples.
 - Conta já cadastrada com e-mail verificado: dados e senha devem corresponder à conta existente; o pagamento converte/renova essa conta, sem criar outra.
-- Senha e CPF não são enviados ao Mercado Pago; a senha fica somente como hash e cifra no servidor. O pedido guarda temporariamente os dados verificados necessários à ativação e apaga o snapshot após ativar.
+- Senha e CPF não são enviados ao Mercado Pago; a senha é protegida por hash no servidor, sem cópia reversível ativa. O pedido guarda temporariamente os dados verificados necessários à ativação e apaga o snapshot após ativar.
 - Preços e validade são definidos no servidor; nenhuma informação de retorno do navegador libera acesso.
 - Webhook exige HMAC válido e consulta GET /v1/payments/{id}. Confere vendedor, moeda BRL, ambiente e valor em centavos. Transações repetidas não duplicam usuário nem estendem a licença outra vez.
 - Criação de usuário, workspace, prazo e confirmação do pedido ocorre em transação. Falha reverte tudo e permite nova tentativa de entrega do webhook.
@@ -50,7 +53,7 @@ Implantado nos dois apps:
 - Fundador possui 10 reservas de vaga no banco para evitar venda simultânea acima do limite. Uma tentativa recusada não libera a reserva, pois a preferência ainda pode receber outro pagamento.
 - Checkout tem validade de 30 minutos e exclui boleto. Não há renovação automática de mensalidade: cada checkout compra a validade do plano escolhido.
 
-Configuração necessária por app:
+Configuração para uma instalação nova (os dois apps publicados já usam credenciais reais e `MERCADOPAGO_SANDBOX=false`; não reaplicar credenciais de teste):
 1. Em Mercado Pago Developers, criar aplicação Checkout Pro com Preferences API e conta vendedora.
 2. Configurar MERCADOPAGO_ACCESS_TOKEN, MERCADOPAGO_WEBHOOK_SECRET, MERCADOPAGO_SELLER_ID, MERCADOPAGO_SANDBOX e PUBLIC_APP_URL. Tokens e segredo nunca recebem prefixo NEXT_PUBLIC.
 3. PUBLIC_APP_URL deve ser somente a origem HTTPS, por exemplo https://finorya.centralsimples.com.br.
@@ -60,8 +63,8 @@ Configuração necessária por app:
 7. Após homologação, configurar credenciais de produção e MERCADOPAGO_SANDBOX=false. Validar entrega e ativação com uma transação real controlada antes de abrir vendas.
 
 Rotas:
-- POST /api/payments/start: inicia confirmação de contatos ou checkout da conta existente.
-- POST /api/payments/checkout: checkout do cadastro novo com ambos os contatos confirmados.
+- POST /api/payments/start: inicia confirmação do e-mail ou checkout da conta existente.
+- POST /api/payments/checkout: checkout do cadastro novo com e-mail confirmado; telefone somente como contato/identificação.
 - POST /api/payments/webhook: confirmação assinada.
 - POST /api/payments/status: consulta de confirmação por identificador imprevisível do pedido.
 - /compra/resultado: acompanha a confirmação e oferece login; não cria conta por parâmetros de URL.
@@ -79,15 +82,13 @@ Fontes:
 | Mensal | R$9,99 | 1 mês |
 Referência do Fundador: R$358,80; economia R$281,80. O preço de R$77,00 foi definido explicitamente, sem alterar os demais planos. Os valores do Ajudante permanecem próprios dele.
 
-## Pendências reais antes de abrir ao público
-- Finalizar contas, credenciais e homologação dos provedores de códigos e pagamentos; domínio/DNS/HTTPS e recursos de produção já foram provisionados.
-- Monitorar CPU e homologar autenticação completa sob uso real; adaptação de Finorya para Workers/D1 concluída.
-- Confirmar backup/restauração e login administrativo válido; migrações remotas aplicadas.
-- Homologar entrega real dos dois códigos, checkout e webhook real.
-- Implementar reconciliação operacional de pedidos abandonados: uma compra pendente/reserva de Fundador não é liberada automaticamente por simples vencimento local, pois um pagamento tardio pode ser confirmado. Reconciliar com a API do provedor antes de liberar identidade ou vaga. Enquanto isso, encaminhar casos pendentes ao administrador.
-- Automatizar alertas/reconciliação de webhook perdido e revisar estornos parciais/licenças anteriores. Falhas do webhook retornam erro para reenvio do provedor.
-- Fechar política de privacidade, termos, reembolso, suporte e retenção dos pedidos pendentes.
+## Pendências vigentes
 
+Marca Google aprovada; escopo gmail.send em análise. Mercado Pago em produção: primeira compra real e homologações financeiras restantes ainda precisam de validação. Custódia externa e recuperação isolada concluídas; upload recorrente, testes operacionais e custódia própria dos secrets são etapas distintas. Lista consolidada e evidências: [STATUS-OPERACIONAL.md](STATUS-OPERACIONAL.md).
+
+## Histórico da entrega inicial
+
+As seções datadas abaixo e a validação local inicial registram a situação daquela entrega, anterior à homologação por e-mail, produção Mercado Pago e custódia externa.
 
 ## Arquivos alterados nesta entrega
 

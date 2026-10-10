@@ -1,5 +1,7 @@
 # Primeiro protótipo — Central Simples
 
+> Registro do protótipo e dos testes iniciais. Catálogo, Lingua Memory e administração integrada já estão publicados; estado vigente em [STATUS-OPERACIONAL.md](STATUS-OPERACIONAL.md).
+
 ## Entrega
 
 Blocos de funcionalidades organizados em três colunas no desktop e duas no mobile, alternando rótulos longos e curtos. Textos podem quebrar dentro do bloco para preservar a leitura. Quando a quantidade de funcionalidades não completa a última linha, o último bloco preenche a largura restante, sem retirar recursos ou deixar células vazias. Quantidades e layout conferidos no navegador.

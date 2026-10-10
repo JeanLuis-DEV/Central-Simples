@@ -1,5 +1,7 @@
 # Administração central
 
+> Revisão documental de 09/10/2026: provisionamento dos três apps publicado; pendências dos provedores e backups em [STATUS-OPERACIONAL.md](STATUS-OPERACIONAL.md).
+
 A Central continua entregando o catálogo como assets estáticos, mas o Worker
 `worker.ts` atende `/api/central/*`. A sessão da Central é assinada no próprio
 Worker e os bancos dos produtos continuam pertencendo aos respectivos
@@ -37,5 +39,5 @@ provisionamento. A Central não copia senhas nem arquivos locais para produção
 
 Os endpoints internos dos produtos nunca são públicos para o navegador. Eles
 aceitam somente chamadas com HMAC válido, janela de cinco minutos e corpo JSON
-limitado. A rotação do segredo deve ser feita nos três Workers em uma janela
+limitado. A rotação do segredo deve ser feita nos quatro Workers em uma janela
 curta para evitar indisponibilidade.

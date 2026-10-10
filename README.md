@@ -1,6 +1,8 @@
 # Central Simples
 
-Primeiro protótipo do catálogo de aplicativos, com a identidade visual do Finorya e do Ajudante Elétrico.
+> Estado registrado em 09/10/2026, entregas concluídas e pendências reais: [status operacional](docs/STATUS-OPERACIONAL.md).
+
+Catálogo publicado de Finorya, Ajudante Elétrico e Lingua Memory, com administração centralizada de contas.
 
 ## Executar
 
@@ -19,7 +21,7 @@ Com computador e celular na mesma rede Wi-Fi, execute `pnpm start:lan` após `pn
 
 ## Endereços dos aplicativos
 
-Copie `.env.example` para `.env.local` e ajuste os endereços públicos. O catálogo usa Finorya na porta 5180, Ajudante Elétrico na porta 5173 e Lingua Memory na porta 5200. Os aplicativos precisam estar ativos para seus links de acesso funcionarem. Alterações nessas variáveis exigem uma nova compilação em produção. Configure `NEXT_PUBLIC_LINGUA_MEMORY_URL` com o endereço público depois da publicação do Lingua Memory.
+Copie `.env.example` para `.env.local` e ajuste os endereços públicos. O catálogo usa Finorya na porta 5180, Ajudante Elétrico na porta 5173 e Lingua Memory na porta 5200. Os aplicativos precisam estar ativos para seus links de acesso funcionarem. Alterações nessas variáveis exigem uma nova compilação em produção. Em produção, `NEXT_PUBLIC_LINGUA_MEMORY_URL` aponta para `https://lingua-memory.centralsimples.com.br`, já publicado.
 
 ## Validar
 
@@ -42,8 +44,8 @@ Hospedagem, confirmação dos contatos, teste sem cartão e integração Mercado
 
 Publicado em https://centralsimples.com.br. A administração fica em
 `/area-restrita`; ela cria, consulta, suspende e exclui contas dos aplicativos
-por endpoints internos assinados. O Lingua Memory aparece no catálogo, mas a
-integração de contas fica pendente até a migração do seu SQLite e dos áudios
-para uma hospedagem persistente. Recursos, comandos e homologações pendentes:
+por endpoints internos assinados. O Lingua Memory já está conectado, com banco
+D1 e áudios privados no R2; a criação e consulta de contas foram validadas.
+Recursos, comandos e homologações pendentes:
 [implantação Cloudflare](docs/IMPLANTACAO-CLOUDFLARE.md) e
 [administração central](docs/CENTRAL-ADMIN.md).

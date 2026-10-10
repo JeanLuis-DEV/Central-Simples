@@ -1,10 +1,20 @@
 # Implantação oficial — 05/10/2026
 
+> Registro histórico: os resultados e as pendências abaixo pertencem à data de cada etapa; não representam a configuração vigente. Desde 08/10 os códigos de Finorya/Ajudante usam somente e-mail e o Mercado Pago opera em produção; em 09/10 a custódia externa dos backups foi concluída. Consulte [STATUS-OPERACIONAL.md](STATUS-OPERACIONAL.md) para pendências atuais.
+
 > Publicação de 08/10/2026: correção da assinatura de integração ativa na versão `f7035b1e-f195-43fd-9880-61a886cba9b2`. Login administrativo e consulta assinada de contas dos três apps aprovados em produção. Evidências em [REVISAO-PRE-COMMIT-2026-10-08.md](REVISAO-PRE-COMMIT-2026-10-08.md).
 
 > Homologação de 08/10/2026: cadastro, recuperação e etapa de e-mail da compra aprovados no Ajudante e Finorya, com oito códigos recebidos, expiração natural, reenvio e limpeza concluídos. Resultados e limites: [HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md](HOMOLOGACAO-CODIGOS-EMAIL-2026-10-08.md).
 
-## Publicado
+## Publicação e configuração vigentes — 09/10/2026
+
+Os quatro projetos estão publicados. A Central oferece catálogo em assets e API administrativa em Worker; os três apps usam D1 separado, e o Lingua Memory também usa R2 privado. O provisionamento HMAC e o login administrativo da Central foram validados em 08/10. Gmail é o único canal de códigos de Finorya/Ajudante; a entrega real passou. Mercado Pago está publicado com credenciais reais e `MERCADOPAGO_SANDBOX=false`. Backups externos e chaves protegidas foram guardados no Drive e a recuperação isolada passou. Veja [STATUS-OPERACIONAL.md](STATUS-OPERACIONAL.md) para evidências e pendências reais.
+
+## Histórico da implantação inicial — 05/10/2026
+
+Tabelas, contagens de migrações, credenciais de teste e limitações abaixo descrevem a implantação inicial, anterior às revisões atuais. Não reaplicar pendências resolvidas nem flags sandbox em produção.
+
+### Publicado na implantação inicial
 
 | Projeto | Endereço oficial | Hospedagem |
 | --- | --- | --- |
@@ -37,7 +47,7 @@ Nos três projetos: `pnpm build:cloudflare`, depois `pnpm deploy:cloudflare`. No
 - Os URLs e IDs nos arquivos de configuração são públicos; tokens continuam em secrets.
 - Publicação atual foi feita pelo CLI. Não foi configurada integração GitHub nem publicação automática a cada push.
 
-## Verificações realizadas
+## Verificações realizadas na implantação inicial
 
 - Builds de produção dos três projetos concluídas.
 - Verificação de ausência das credenciais privadas existentes nos pacotes compilados dos apps.
@@ -49,13 +59,13 @@ Nos três projetos: `pnpm build:cloudflare`, depois `pnpm deploy:cloudflare`. No
 
 Esses testes não homologam login válido, entrega externa de códigos, pagamento, estorno ou fluxo completo de cadastro. Monitorar CPU e erros 1102 sob uso real: uma requisição que respondeu corretamente não garante capacidade do plano gratuito. A segurança do scrypt foi preservada.
 
-## Pendências para liberar cadastro e compra
+## Pendências na implantação inicial — registro histórico
 
 1. Validação de identidade concluída. Aplicações Checkout Pro/Preferences criadas: Finorya `3439386659351205` e Ajudante Elétrico `4485062641751185`. Os termos foram autorizados pelo titular.
 2. Webhooks de teste e produção salvos no painel de cada aplicação, com o evento Pagamentos (legacy):
    - https://finorya.centralsimples.com.br/api/payments/webhook
    - https://ajudante.centralsimples.com.br/api/payments/webhook
-3. `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET` e `MERCADOPAGO_SELLER_ID` registrados como secrets no Worker correspondente. Credenciais obtidas na seção Teste; `/users/me` confirmou contas vendedoras de teste. O token exibido nessa seção começa com APP_USR: o prefixo isolado não identifica o ambiente. `MERCADOPAGO_SANDBOX=true` permanece. Credenciais produtivas e cobrança real ainda não foram ativadas.
+3. `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET` e `MERCADOPAGO_SELLER_ID` registrados como secrets no Worker correspondente. Credenciais obtidas na seção Teste; `/users/me` confirmou contas vendedoras de teste. O token exibido nessa seção começa com APP_USR: o prefixo isolado não identifica o ambiente. Na implantação inicial, `MERCADOPAGO_SANDBOX=true` e as credenciais eram de teste. Esse estado foi substituído em 08/10 por credenciais reais e `MERCADOPAGO_SANDBOX=false`; a primeira compra real ainda precisa de validação.
 4. Gmail configurado; recebimento real de cadastro, recuperação e etapa de e-mail da compra aprovado em 08/10, incluindo expiração e reenvio. Dados de teste removidos; limites no relatório acima. WhatsApp removido.
 5. O DNS existente tem MX nulo (`.`), SPF `v=spf1 -all` e DMARC `p=reject`. Eles foram preservados. O provedor de e-mail deve fornecer os registros corretos de domínio/subdomínio de envio; não remover a proteção DMARC para mascarar falta de configuração.
 6. Enquanto os provedores estiverem ausentes, novos cadastros e compras permanecem bloqueados. Nenhuma conta paga foi criada e nenhum pagamento foi cobrado. O teste mantém 168 horas sem cartão após cadastro verificado.

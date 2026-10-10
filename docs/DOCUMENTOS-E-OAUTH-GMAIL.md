@@ -1,5 +1,7 @@
 # Documentos públicos e OAuth Gmail
 
+> Estado de 09/10: textos sem confirmação WhatsApp já publicados, marca aprovada e escopo gmail.send em análise; [STATUS-OPERACIONAL.md](STATUS-OPERACIONAL.md) e [verificação Google](VERIFICACAO-GOOGLE-OAUTH-2026-10-09.md). Registros anteriores são históricos.
+
 > Atualização de 09/10/2026: marca OAuth verificada e publicada. Vídeo e justificativa salvos; solicitação do escopo gmail.send enviada, com status confirmado pelo Google: **O acesso aos dados do seu app está em análise.** Credenciais produtivas preservadas. A aprovação do escopo ainda depende do Google. Detalhes: [verificação Google OAuth](VERIFICACAO-GOOGLE-OAUTH-2026-10-09.md).
 
 Atualização: 05/10/2026.
