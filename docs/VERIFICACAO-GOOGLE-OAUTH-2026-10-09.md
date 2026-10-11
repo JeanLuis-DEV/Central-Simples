@@ -1,5 +1,7 @@
 # Google OAuth: marca aprovada e escopo em análise — 09/10/2026
 
+> Atualização confirmada em 11/10/2026: marca aprovada, acesso aos dados ainda em análise. A equipe solicitou novo vídeo, acesso de teste e dois ajustes de privacidade. A política corrigida já está publicada; nenhum e-mail de resposta foi enviado. [Revisão e próximos passos](CORRECAO-PRIVACIDADE-GOOGLE-2026-10-11.md). As seções de 09/10 abaixo preservam o histórico da submissão.
+
 ## Resultado confirmado no painel
 
 Conta: `jeanluis.dev@gmail.com`. Projeto: `prefab-clover-510801-h2`, Central Simples.

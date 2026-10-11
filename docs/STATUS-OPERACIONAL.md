@@ -1,6 +1,6 @@
-# Estado operacional e pendências — 09/10/2026
+# Estado operacional e pendências — 11/10/2026
 
-Registro consolidado das últimas evidências documentadas até 09/10/2026. Esta revisão não executou novos testes, pagamentos, backups nem consultas aos provedores. Relatórios de 02 a 07/10 preservam resultados históricos e não definem a configuração vigente.
+Registro consolidado das evidências de 09/10 e da consulta Google de 11/10/2026. Em 11/10, a conta e o projeto corretos foram conferidos no painel e no Gmail; a política corrigida foi publicada. As demais evidências operacionais permanecem datadas, sem nova homologação financeira ou de backups. Relatórios de 02 a 07/10 preservam resultados históricos e não definem a configuração vigente.
 
 ## Estado vigente
 
@@ -10,7 +10,7 @@ Registro consolidado das últimas evidências documentadas até 09/10/2026. Esta
 | Administração | Área Restrita somente na Central, com seleção do aplicativo; integração assinada dos três apps publicada e validada |
 | Códigos | Finorya e Ajudante usam somente Gmail; cadastro, recuperação e etapa de e-mail da compra tiveram recebimento real, expiração e reenvio validados em 08/10 |
 | WhatsApp de autenticação | Feature, adaptadores e segredos removidos dos apps em 08/10; não configurar Twilio/Meta nem renovar a credencial antiga |
-| Google OAuth | Marca aprovada e publicada; solicitação de aprovação do escopo gmail.send enviada em 09/10 e registrada em análise |
+| Google OAuth | Marca aprovada; gmail.send em análise. Revisão de 11/10 pediu ajustes de privacidade, novo vídeo e acesso de teste; política corrigida e publicada |
 | Mercado Pago | Finorya e Ajudante publicados em produção com credenciais reais e MERCADOPAGO_SANDBOX=false desde 08/10; checkouts sem pagamento e entrega assinada do simulador validados |
 | Backups | Snapshots produtivos dos três apps cifrados e chaves protegidas guardados no Drive privado em 09/10; downloads conferidos por tamanho e SHA-256 |
 | Recuperação | Finorya/Ajudante restaurados em D1 isolado; Lingua Memory restaurado em D1/R2 isolados, incluindo fixture preenchida e fluxo da aplicação; recursos temporários removidos |
@@ -37,7 +37,7 @@ Finorya/Ajudante têm backup diário e monitor horário no Windows, dependentes 
 
 ## Pendências reais
 
-1. **Google:** aguardar a decisão sobre gmail.send e responder caso o Google solicite evidências adicionais. A marca não está mais pendente.
+1. **Google:** a equipe respondeu em 11/10: preparar novo vídeo com todas as permissões expandidas e efeito do envio no Gmail, acesso de teste ativo e instruções. Os dois ajustes da política de privacidade já foram publicados; é necessário responder à conversa da revisão quando os itens estiverem completos. A marca segue aprovada e gmail.send ainda não está aprovado. [Registro da revisão](CORRECAO-PRIVACIDADE-GOOGLE-2026-10-11.md).
 2. **Meta:** confirmar a exclusão do cartão e dos ativos antigos no painel autenticado. A remoção do código e dos segredos dos Workers não comprova exclusão no provedor. Não há homologação WhatsApp ou renovação de token a concluir.
 3. **Vendas:** validar a primeira compra real, a notificação automática de pagamento e a criação/conversão/renovação da licença. A entrega pelo simulador não comprova esse fluxo. A medição oficial de qualidade exige um pagamento produtivo elegível; o painel com data 1900/ID genérico não é resultado válido.
 4. **Cenários financeiros externos:** estorno parcial, estorno de licença anterior preservando a posterior e nova renovação completa pela interface. Os relatórios sandbox são evidências históricas em bancos isolados.

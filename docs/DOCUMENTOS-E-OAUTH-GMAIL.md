@@ -1,5 +1,7 @@
 # Documentos públicos e OAuth Gmail
 
+> Atualização de 11/10/2026: os dois ajustes solicitados de compartilhamento/proteção foram publicados na política de privacidade. O Google ainda exige novo vídeo e acesso de teste; [evidências e próximos passos](CORRECAO-PRIVACIDADE-GOOGLE-2026-10-11.md).
+
 > Estado de 09/10: textos sem confirmação WhatsApp já publicados, marca aprovada e escopo gmail.send em análise; [STATUS-OPERACIONAL.md](STATUS-OPERACIONAL.md) e [verificação Google](VERIFICACAO-GOOGLE-OAUTH-2026-10-09.md). Registros anteriores são históricos.
 
 > Atualização de 09/10/2026: marca OAuth verificada e publicada. Vídeo e justificativa salvos; solicitação do escopo gmail.send enviada, com status confirmado pelo Google: **O acesso aos dados do seu app está em análise.** Credenciais produtivas preservadas. A aprovação do escopo ainda depende do Google. Detalhes: [verificação Google OAuth](VERIFICACAO-GOOGLE-OAUTH-2026-10-09.md).
