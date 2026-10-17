@@ -9,15 +9,24 @@
     "directory": "./out",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": [
+      "/api/*"
+    ]
   },
   "vars": {
     "AJUDANTE_APP_URL": "https://ajudante.centralsimples.com.br",
     "FINORYA_APP_URL": "https://finorya.centralsimples.com.br",
-    "LINGUA_MEMORY_APP_URL": "https://lingua-memory.centralsimples.com.br"
+    "LINGUA_MEMORY_APP_URL": "https://lingua-memory.centralsimples.com.br",
+    "MEU_NEGOCIO_APP_URL": "https://meunegocio.centralsimples.com.br"
   },
   "routes": [
-    { "pattern": "centralsimples.com.br", "custom_domain": true },
-    { "pattern": "www.centralsimples.com.br", "custom_domain": true }
+    {
+      "pattern": "centralsimples.com.br",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.centralsimples.com.br",
+      "custom_domain": true
+    }
   ]
 }

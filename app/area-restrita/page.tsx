@@ -4,13 +4,14 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Check, LogOut, Plus, RefreshCw, ShieldCheck, Trash2 } from "lucide-react";
 import Link from "next/link";
 
-type CentralApp = { id: "ajudante" | "finorya" | "lingua-memory"; name: string; connected: boolean; available: boolean };
+type CentralApp = { id: "ajudante" | "finorya" | "lingua-memory" | "meu-negocio"; name: string; connected: boolean; available: boolean };
 type ManagedAccount = { id: string; name: string; username: string; role: string; active: number; account_type?: string; expires_at?: number | null; expired?: boolean; created_at?: number };
 
 const fallbackApps: CentralApp[] = [
   { id: "ajudante", name: "Ajudante Elétrico", connected: false, available: true },
   { id: "finorya", name: "Finorya", connected: false, available: true },
   { id: "lingua-memory", name: "Lingua Memory", connected: false, available: false },
+  { id: "meu-negocio", name: "Meu Negócio", connected: false, available: false },
 ];
 
 export default function RestrictedArea() {

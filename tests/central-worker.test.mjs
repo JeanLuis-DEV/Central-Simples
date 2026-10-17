@@ -15,6 +15,8 @@ const env = {
   AJUDANTE_APP_URL: "https://ajudante.example",
   FINORYA_APP_URL: "https://finorya.example",
   LINGUA_MEMORY_APP_URL: "https://lingua.example",
+  MEU_NEGOCIO_APP_URL: "https://meunegocio.example",
+  MEU_NEGOCIO_INTEGRATION_SECRET: "meu-negocio-exclusive-secret-only-".repeat(2),
   ASSETS: { fetch() { throw new Error("Unexpected static asset request"); } },
 };
 
@@ -44,6 +46,7 @@ for (const [appId, target] of [
   ["ajudante", env.AJUDANTE_APP_URL],
   ["finorya", env.FINORYA_APP_URL],
   ["lingua-memory", env.LINGUA_MEMORY_APP_URL],
+  ["meu-negocio", env.MEU_NEGOCIO_APP_URL],
 ]) {
   test(`${appId}: signs empty and JSON bodies using the apps' hexadecimal HMAC contract`, async () => {
     const cookie = await session();
@@ -61,7 +64,7 @@ for (const [appId, target] of [
       nonces.add(nonce);
       const body = init.body ?? "";
       assert.match(signature, /^[a-f0-9]{64}$/);
-      assert.equal(signature, createHmac("sha256", env.CENTRAL_INTEGRATION_SECRET)
+      assert.equal(signature, createHmac("sha256", appId === "meu-negocio" ? env.MEU_NEGOCIO_INTEGRATION_SECRET : env.CENTRAL_INTEGRATION_SECRET)
         .update(`${timestamp}.${nonce}.${body}`).digest("hex"));
       if (init.method === "GET") assert.equal(body, "");
       else assert.deepEqual(JSON.parse(body), { name: "Teste Unicode — João" });
@@ -82,4 +85,16 @@ test("refuses account operations without an authenticated session", async () => 
   const response = await worker.fetch(request("/api/central/accounts?appId=finorya"), env);
   assert.equal(response.status, 401);
   assert.equal(upstream.mock.callCount(), 0);
+});
+
+
+test("Meu Negócio requires its exclusive key and never falls back to another app key", async () => {
+  const cookie = await session();
+  const withoutKey = { ...env, MEU_NEGOCIO_INTEGRATION_SECRET: "" };
+  const upstream = mock.method(globalThis, "fetch", () => { throw new Error("Must not reach an app"); });
+  const response = await worker.fetch(request("/api/central/accounts?appId=meu-negocio", "GET", undefined, cookie), withoutKey);
+  assert.equal(response.status, 503);
+  assert.equal(upstream.mock.callCount(), 0);
+  const apps = await (await worker.fetch(request("/api/central/apps"), withoutKey)).json();
+  assert.deepEqual(apps.apps.find(app => app.id === "meu-negocio"), { id: "meu-negocio", name: "Meu Negócio", connected: false, available: false });
 });

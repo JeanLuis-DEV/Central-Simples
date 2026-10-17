@@ -16,10 +16,12 @@ type Env = {
   AJUDANTE_APP_URL?: string;
   FINORYA_APP_URL?: string;
   LINGUA_MEMORY_APP_URL?: string;
+  MEU_NEGOCIO_APP_URL?: string;
+  MEU_NEGOCIO_INTEGRATION_SECRET?: string;
 };
 
-type TargetId = "ajudante" | "finorya" | "lingua-memory";
-type TargetEnvKey = "AJUDANTE_APP_URL" | "FINORYA_APP_URL" | "LINGUA_MEMORY_APP_URL";
+type TargetId = "ajudante" | "finorya" | "lingua-memory" | "meu-negocio";
+type TargetEnvKey = "AJUDANTE_APP_URL" | "FINORYA_APP_URL" | "LINGUA_MEMORY_APP_URL" | "MEU_NEGOCIO_APP_URL";
 
 const SESSION_COOKIE = "central_sid";
 const SESSION_SECONDS = 60 * 60 * 12;
@@ -28,6 +30,7 @@ const TARGETS: Record<TargetId, { env: TargetEnvKey; label: string }> = {
   ajudante: { env: "AJUDANTE_APP_URL", label: "Ajudante Elétrico" },
   finorya: { env: "FINORYA_APP_URL", label: "Finorya" },
   "lingua-memory": { env: "LINGUA_MEMORY_APP_URL", label: "Lingua Memory" },
+  "meu-negocio": { env: "MEU_NEGOCIO_APP_URL", label: "Meu Negócio" },
 };
 
 const encoder = new TextEncoder();
@@ -161,7 +164,7 @@ class ApiError extends Error {
 }
 
 function targetId(value: unknown): TargetId {
-  if (value === "ajudante" || value === "finorya" || value === "lingua-memory") return value;
+  if (value === "ajudante" || value === "finorya" || value === "lingua-memory" || value === "meu-negocio") return value;
   throw new ApiError(400, "Escolha um aplicativo válido.");
 }
 
@@ -180,12 +183,13 @@ function targetUrl(env: Env, id: TargetId) {
 async function callApplication(env: Env, id: TargetId, method: string, payload?: Record<string, unknown>) {
   const base = targetUrl(env, id);
   if (!base) throw new ApiError(503, `${TARGETS[id].label} ainda não está conectado à Central.`);
-  if (!env.CENTRAL_INTEGRATION_SECRET || env.CENTRAL_INTEGRATION_SECRET.length < 32) throw new ApiError(503, "A integração segura ainda não foi configurada.");
+  const integrationSecret = id === "meu-negocio" ? env.MEU_NEGOCIO_INTEGRATION_SECRET : env.CENTRAL_INTEGRATION_SECRET;
+  if (!integrationSecret || integrationSecret.length < 32) throw new ApiError(503, "A integração segura ainda não foi configurada.");
   const body = method === "GET" ? "" : JSON.stringify(payload ?? {});
   const timestamp = String(Date.now());
   const nonce = base64url(crypto.getRandomValues(new Uint8Array(18)));
   const signature = Array.from(
-    await hmac(env.CENTRAL_INTEGRATION_SECRET, `${timestamp}.${nonce}.${body}`),
+    await hmac(integrationSecret, `${timestamp}.${nonce}.${body}`),
     (byte) => byte.toString(16).padStart(2, "0"),
   ).join("");
   const controller = new AbortController();
@@ -222,7 +226,7 @@ async function handleApi(request: Request, env: Env) {
   const url = new URL(request.url);
   const path = url.pathname;
   if (path === "/api/central/apps" && request.method === "GET") {
-    return json({ apps: (Object.keys(TARGETS) as TargetId[]).map((id) => ({ id, name: TARGETS[id].label, connected: Boolean(targetUrl(env, id)), available: id !== "lingua-memory" || Boolean(targetUrl(env, id)) })) });
+    return json({ apps: (Object.keys(TARGETS) as TargetId[]).map((id) => ({ id, name: TARGETS[id].label, connected: Boolean(targetUrl(env, id)) && (id !== "meu-negocio" || (env.MEU_NEGOCIO_INTEGRATION_SECRET?.length ?? 0) >= 32), available: id === "meu-negocio" ? Boolean(targetUrl(env, id)) && (env.MEU_NEGOCIO_INTEGRATION_SECRET?.length ?? 0) >= 32 : id !== "lingua-memory" || Boolean(targetUrl(env, id)) })) });
   }
   if (path === "/api/central/session/login" && request.method === "POST") {
     if (!env.CENTRAL_ADMIN_USERNAME || !env.CENTRAL_ADMIN_PASSWORD_HASH || !env.CENTRAL_SESSION_SECRET || env.CENTRAL_SESSION_SECRET.length < 32) return json({ error: "A autenticação da Central ainda não foi configurada." }, 503);
