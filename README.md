@@ -1,8 +1,8 @@
 # Central Simples
 
-> Estado registrado em 09/10/2026, entregas concluídas e pendências reais: [status operacional](docs/STATUS-OPERACIONAL.md).
+> Catálogo atualizado em 17/10/2026; entregas e pendências reais: [status operacional](docs/STATUS-OPERACIONAL.md).
 
-Catálogo publicado de Finorya, Ajudante Elétrico e Lingua Memory, com administração centralizada de contas.
+Catálogo de Finorya, Ajudante Elétrico, Meu Negócio e Lingua Memory, com administração centralizada de contas.
 
 ## Executar
 
@@ -21,7 +21,7 @@ Com computador e celular na mesma rede Wi-Fi, execute `pnpm start:lan` após `pn
 
 ## Endereços dos aplicativos
 
-Copie `.env.example` para `.env.local` e ajuste os endereços públicos. O catálogo usa Finorya na porta 5180, Ajudante Elétrico na porta 5173 e Lingua Memory na porta 5200. Os aplicativos precisam estar ativos para seus links de acesso funcionarem. Alterações nessas variáveis exigem uma nova compilação em produção. Em produção, `NEXT_PUBLIC_LINGUA_MEMORY_URL` aponta para `https://lingua-memory.centralsimples.com.br`, já publicado.
+Copie `.env.example` para `.env.local` e ajuste os endereços públicos. O catálogo usa Finorya na porta 5180, Ajudante Elétrico na porta 5173, Meu Negócio na porta 5181 e Lingua Memory na porta 5200. Os aplicativos precisam estar ativos para seus links de acesso funcionarem. Alterações nessas variáveis exigem uma nova compilação em produção. O build Cloudflare configura os domínios publicados; `NEXT_PUBLIC_MEU_NEGOCIO_URL` aponta para `https://meunegocio.centralsimples.com.br`.
 
 ## Validar
 

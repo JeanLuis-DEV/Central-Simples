@@ -12,6 +12,7 @@ import {
   MonitorSmartphone,
   ShieldCheck,
   Sparkles,
+  Store,
   X,
   Zap,
 } from "lucide-react";
@@ -23,6 +24,8 @@ function AppIcon({ app, small = false }: { app: CatalogApp; small?: boolean }) {
         "F"
       ) : app.id === "lingua-memory" ? (
         <BookOpen size={small ? 18 : 27} strokeWidth={2.2} />
+      ) : app.id === "meu-negocio" ? (
+        <Store size={small ? 18 : 27} strokeWidth={2.2} />
       ) : (
         <Zap size={small ? 18 : 27} fill="currentColor" />
       )}
@@ -107,7 +110,7 @@ export default function Catalog() {
           </div>
           <div
             className="hero-visual mobile-showcase"
-            aria-label="Finorya, Ajudante Elétrico e Lingua Memory no celular"
+            aria-label={`${apps.map((app) => app.name).join(", ")} no celular`}
           >
             <div className="visual-glow" aria-hidden="true" />
             {apps.map((app) => (

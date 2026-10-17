@@ -6,6 +6,7 @@ await mkdir("artifacts", { recursive: true });
 const appUrls = {
   finorya: process.env.TEST_FINORYA_URL || "http://127.0.0.1:5180",
   ajudante: process.env.TEST_AJUDANTE_URL || "http://127.0.0.1:5173",
+  negocio: process.env.TEST_MEU_NEGOCIO_URL || "http://127.0.0.1:5181",
   lingua: process.env.TEST_LINGUA_MEMORY_URL || "http://127.0.0.1:5200",
 };
 const browser = await chromium.launch({
@@ -26,7 +27,7 @@ try {
     await page.title(),
     "Central Simples — Aplicativos para facilitar seu dia",
   );
-  assert.equal(await page.locator(".app-card").count(), 3);
+  assert.equal(await page.locator(".app-card").count(), 4);
   assert.ok(
     await page
       .locator("img")
@@ -39,10 +40,10 @@ try {
     await page.getByRole("group", { name: "Filtrar por categoria" }).count(),
     0,
   );
-  assert.equal(await page.locator(".phone-preview").count(), 3);
+  assert.equal(await page.locator(".phone-preview").count(), 4);
   assert.deepEqual(
     await page.locator(".phone-preview figcaption strong").allTextContents(),
-    ["Finorya", "Ajudante Elétrico", "Lingua Memory"],
+    ["Finorya", "Ajudante Elétrico", "Meu Negócio", "Lingua Memory"],
   );
   for (const screen of await page.locator(".phone-screen img").all()) {
     assert.ok(await screen.isVisible());
@@ -52,7 +53,7 @@ try {
       ),
     );
   }
-  for (const name of ["Finorya", "Ajudante Elétrico", "Lingua Memory"]) {
+  for (const name of ["Finorya", "Ajudante Elétrico", "Meu Negócio", "Lingua Memory"]) {
     const trigger = page.getByRole("button", {
       name: `Conhecer ${name}`,
       exact: true,
@@ -79,7 +80,7 @@ try {
   }
   await page.getByRole("button", { name: "Acessar apps", exact: true }).click();
   const access = page.getByRole("dialog");
-  assert.equal(await access.locator(".access-list a").count(), 3);
+  assert.equal(await access.locator(".access-list a").count(), 4);
   assert.equal(
     await access.locator(".access-list a").first().getAttribute("href"),
     `${appUrls.finorya}/login`,
@@ -90,6 +91,10 @@ try {
   );
   assert.equal(
     await access.locator(".access-list a").nth(2).getAttribute("href"),
+    `${appUrls.negocio}/login`,
+  );
+  assert.equal(
+    await access.locator(".access-list a").nth(3).getAttribute("href"),
     `${appUrls.lingua}/login`,
   );
   await page.screenshot({ path: "artifacts/access-desktop.png" });

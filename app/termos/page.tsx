@@ -5,10 +5,10 @@ export const metadata: Metadata = { title: "Termos de uso — Central Simples" }
 
 export default function TermsPage() {
   return (
-    <LegalDocument title="Termos de uso">
+    <LegalDocument title="Termos de uso" updatedAt="17 de outubro de 2026">
       <section>
         <h2>1. Aplicativos e conta</h2>
-        <p>A Central Simples reúne o catálogo de aplicativos. O Finorya organiza registros financeiros; o Ajudante Elétrico organiza clientes, serviços, orçamentos, ordens de serviço e registros financeiros. Cada aplicativo utiliza sua própria conta e licença.</p>
+        <p>A Central Simples reúne o catálogo de aplicativos. O Finorya organiza registros financeiros; o Ajudante Elétrico organiza clientes, serviços, orçamentos, ordens de serviço e registros financeiros; o Meu Negócio organiza vendas, clientes, fornecedores, produtos, estoque, recebimentos e entregas; o Lingua Memory auxilia o estudo de idiomas com frases, revisões e gravações de pronúncia. Cada aplicativo mantém sua própria conta, seus dados e, quando aplicável, sua licença.</p>
         <p>Informe dados corretos, mantenha suas credenciais protegidas e utilize somente dados e arquivos que você esteja autorizado a tratar. Não utilize os serviços para atividades ilícitas, acesso indevido a outras contas ou tentativas de contornar controles de segurança.</p>
       </section>
       <section>

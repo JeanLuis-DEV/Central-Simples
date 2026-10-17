@@ -5,15 +5,16 @@ export const metadata: Metadata = { title: "Privacidade — Central Simples" };
 
 export default function PrivacyPage() {
   return (
-    <LegalDocument title="Política de privacidade" updatedAt="11 de outubro de 2026">
+    <LegalDocument title="Política de privacidade" updatedAt="17 de outubro de 2026">
       <section>
         <h2>1. Serviços e contato</h2>
-        <p>Esta política descreve o tratamento de dados pela Central Simples, pelo Finorya, pelo Ajudante Elétrico e pelo Lingua Memory. Cada aplicativo mantém sua própria conta e seus próprios dados. Para assuntos de privacidade, entre em contato pelo e-mail <a href="mailto:jeanluis.dev@gmail.com">jeanluis.dev@gmail.com</a>.</p>
+        <p>Esta política descreve o tratamento de dados pela Central Simples, pelo Finorya, pelo Ajudante Elétrico, pelo Meu Negócio e pelo Lingua Memory. Cada aplicativo mantém sua própria conta e seus próprios dados. Para assuntos de privacidade, entre em contato pelo e-mail <a href="mailto:jeanluis.dev@gmail.com">jeanluis.dev@gmail.com</a>.</p>
       </section>
       <section>
         <h2>2. Dados utilizados</h2>
         <p>O cadastro, a compra e a recuperação de acesso podem utilizar nome, login, e-mail, CPF e telefone. Os aplicativos também armazenam os registros que você insere: dados financeiros no Finorya e dados de clientes, produtos, serviços, orçamentos, ordens de serviço, fotos e movimentações financeiras no Ajudante Elétrico.</p>
         <p>O Lingua Memory utiliza nome, e-mail, senha, idioma e preferências de estudo, sem exigir CPF, telefone ou códigos. Também armazena frases, palavras, traduções, progresso e gravações de pronúncia que você decide salvar. O acesso ao microfone depende de sua permissão no navegador.</p>
+        <p>O Meu Negócio armazena os dados comerciais que você cadastra: clientes e fornecedores, contatos e endereços de entrega, produtos, estoque, vendas, recebimentos, parcelas e registros financeiros. Esses dados são utilizados para organizar sua atividade comercial, gerar relatórios e acompanhar pedidos e entregas.</p>
         <p>Dados técnicos de sessão, requisições e tentativas de acesso são utilizados para autenticação, funcionamento e proteção contra abuso. Cookies de sessão e armazenamento no dispositivo permitem manter o acesso e os dados locais necessários ao funcionamento e à sincronização.</p>
       </section>
       <section>
@@ -23,7 +24,7 @@ export default function PrivacyPage() {
       </section>
       <section>
         <h2>4. Gmail API e dados do Google</h2>
-        <p>A Central Simples integra Finorya e Ajudante Elétrico à Gmail API exclusivamente com o escopo <code>https://www.googleapis.com/auth/gmail.send</code>, para enviar códigos de cadastro, compra e recuperação, solicitações de suporte e alertas operacionais. A conta remetente é jeanluis.dev@gmail.com, autorizada por seu titular. Os clientes dos aplicativos não precisam autorizar acesso ao próprio Gmail.</p>
+        <p>A Central Simples integra Finorya, Ajudante Elétrico e Meu Negócio à Gmail API exclusivamente com o escopo <code>https://www.googleapis.com/auth/gmail.send</code>, para enviar códigos de cadastro, compra e recuperação, solicitações de suporte e alertas operacionais quando habilitados. A conta remetente é jeanluis.dev@gmail.com, autorizada por seu titular. Os clientes dos aplicativos não precisam autorizar acesso ao próprio Gmail.</p>
         <p>Os dados do Google tratados pela integração incluem a autorização OAuth, os tokens de acesso e renovação e as respostas técnicas que confirmam o envio. O endereço remetente é configurado pelo responsável. Não lemos, listamos ou excluímos mensagens, não acessamos contatos nem anexos existentes na conta e não importamos sua caixa postal para os aplicativos.</p>
         <p>Para enviar uma mensagem, transmitimos ao Google o remetente, destinatário, assunto e conteúdo necessários à função solicitada. Códigos são enviados ao e-mail informado pelo usuário; solicitações de suporte e alertas operacionais são enviados ao responsável em jeanluis.dev@gmail.com. O suporte inclui os dados declarados no formulário, com CPF mascarado. Alertas operacionais não incluem dados pessoais de clientes. As mensagens enviadas ficam na conta Gmail remetente e na caixa do destinatário, sujeitas às configurações dessas contas.</p>
         <h3>Com quem compartilhamos dados do Google</h3>
@@ -43,6 +44,7 @@ export default function PrivacyPage() {
         <h2>5. Prestadores e atendimento</h2>
         <p>A Cloudflare fornece hospedagem e armazenamento do serviço. O Mercado Pago processa compras; informações de pagamento são tratadas em seus próprios ambientes. O Gmail configurado em cada aplicativo recebe apenas os dados necessários aos códigos e mensagens de e-mail.</p>
         <p>Cópias operacionais criptografadas podem ser guardadas no Google Drive privado do responsável, com acesso restrito e chaves protegidas. Essa custódia é independente do escopo de envio Gmail. No Lingua Memory, ao clicar em Traduzir frase original, a frase e o idioma são enviados ao serviço MyMemory para obter uma sugestão de tradução; o texto pode ser preenchido manualmente sem esse envio.</p>
+        <p>No Meu Negócio, ao abrir uma rota de entrega no Google Maps ou no Waze, o endereço escolhido é encaminhado ao respectivo serviço. Ao utilizar os atalhos de WhatsApp para contato ou aviso de entrega, o telefone e a mensagem preparada são abertos nesse serviço; o envio depende de sua ação. Esses recursos são opcionais e independentes da confirmação de conta por e-mail.</p>
         <p>Ao solicitar recuperação manual, os dados informados no formulário são encaminhados ao suporte em jeanluis.dev@gmail.com. O pedido utiliza somente os dígitos finais do CPF na mensagem de atendimento. A solicitação não concede acesso automaticamente e pode exigir verificações adicionais.</p>
       </section>
       <section>

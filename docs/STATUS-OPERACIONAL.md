@@ -1,13 +1,21 @@
-# Estado operacional e pendências — 11/10/2026
+# Estado operacional e pendências — 17/10/2026
 
 Registro consolidado das evidências de 09/10 e da consulta Google de 11/10/2026. Em 11/10, a conta e o projeto corretos foram conferidos no painel e no Gmail; a política corrigida foi publicada. As demais evidências operacionais permanecem datadas, sem nova homologação financeira ou de backups. Relatórios de 02 a 07/10 preservam resultados históricos e não definem a configuração vigente.
 
 ## Estado vigente
 
+Atualização de 17/10/2026: Meu Negócio publicado em domínio próprio e integrado
+à administração da Central com chave exclusiva. Sua inclusão no catálogo público,
+nos atalhos, nos termos e na privacidade está registrada em
+[Catálogo Meu Negócio](CATALOGO-MEU-NEGOCIO-2026-10-17.md). O novo vídeo Google
+também deve demonstrar os fluxos de e-mail desse aplicativo. A aprovação OAuth
+continua sem confirmação; os registros antigos de entrega real não homologam o
+envio do Meu Negócio.
+
 | Área | Estado registrado |
 | --- | --- |
-| Publicação | Central Simples, Finorya, Ajudante Elétrico e Lingua Memory publicados na Cloudflare, com HTTPS |
-| Administração | Área Restrita somente na Central, com seleção do aplicativo; integração assinada dos três apps publicada e validada |
+| Publicação | Central Simples, Finorya, Ajudante Elétrico, Meu Negócio e Lingua Memory publicados na Cloudflare, com HTTPS |
+| Administração | Área Restrita somente na Central; quatro apps integrados, com chave exclusiva para Meu Negócio |
 | Códigos | Finorya e Ajudante usam somente Gmail; cadastro, recuperação e etapa de e-mail da compra tiveram recebimento real, expiração e reenvio validados em 08/10 |
 | WhatsApp de autenticação | Feature, adaptadores e segredos removidos dos apps em 08/10; não configurar Twilio/Meta nem renovar a credencial antiga |
 | Google OAuth | Marca aprovada; gmail.send em análise. Revisão de 11/10 pediu ajustes de privacidade, novo vídeo e acesso de teste; política corrigida e publicada |
@@ -25,9 +33,10 @@ O telefone de Finorya/Ajudante continua como contato e dado de identificação; 
 | Central Simples | https://centralsimples.com.br | Assets do catálogo e Worker da API administrativa; sem banco central |
 | Finorya | https://finorya.centralsimples.com.br | Worker e D1 próprio |
 | Ajudante Elétrico | https://ajudante.centralsimples.com.br | Worker e D1 próprio |
+| Meu Negócio | https://meunegocio.centralsimples.com.br | Worker, D1 exclusivo, sincronização via Durable Object e backups no R2 privado |
 | Lingua Memory | https://lingua-memory.centralsimples.com.br | Worker padrão, D1 e R2 privado; sem Containers |
 
-CENTRAL_INTEGRATION_SECRET está configurado nos quatro Workers. A Central usa chamadas HMAC; os bancos continuam separados, vinculados aos respectivos aplicativos. A correção da assinatura da Central foi publicada em 08/10. Nenhuma chave deve ser regenerada para aplicar instruções de uma instalação nova.
+A Central usa chamadas HMAC; os bancos continuam separados, vinculados aos respectivos aplicativos. Finorya, Ajudante e Lingua Memory mantêm a integração existente. Meu Negócio usa `CENTRAL_INTEGRATION_SECRET` no seu Worker e `MEU_NEGOCIO_INTEGRATION_SECRET` exclusivo na Central, sem reutilizar a chave dos outros produtos. Nenhuma chave deve ser regenerada para aplicar instruções de uma instalação nova.
 
 ## Custódia de backups
 
