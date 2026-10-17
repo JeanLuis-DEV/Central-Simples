@@ -16,10 +16,13 @@ Finorya, Ajudante Elétrico, Meu Negócio e Lingua Memory. Cada app ficou com um
 | Finorya | `admin` | `owner` |
 | Ajudante Elétrico | `admin` | `owner` |
 | Meu Negócio | `admin` | `owner` |
-| Lingua Memory | `admin@centralsimples.com.br` | `admin` |
+| Lingua Memory | `admin` (e-mail também aceito) | `admin` |
 
-O Lingua Memory exige e-mail no login. Seu identificador administrativo não
-representa a criação de uma caixa postal. A senha foi definida conforme a nova
+Após a reinicialização, foi publicado suporte ao login `admin` no Lingua Memory,
+preservando a mesma conta, e-mail e hash de senha. O e-mail
+`admin@centralsimples.com.br` também permanece aceito e não representa a criação
+de uma caixa postal. Veja o [registro do ajuste](https://github.com/JeanLuis-DEV/Lingua-Memory/blob/main/docs/LOGIN-ADMIN-2026-10-17.md).
+A senha foi definida conforme a nova
 instrução do proprietário e não está registrada neste documento nem no Git.
 
 Os e-mails usados anteriormente nos cadastros foram liberados. Nenhuma conta
