@@ -1,5 +1,9 @@
 # Revisão Google e política de privacidade — 11/10/2026
 
+Atualização de 17/10/2026: novo vídeo, justificativa e acessos de revisão enviados
+à equipe Google. Veja o [registro do complemento](REENVIO-VERIFICACAO-GOOGLE-2026-10-17.md).
+As etapas abaixo preservam o histórico de 11/10; o escopo ainda aguarda aprovação.
+
 ## Situação confirmada
 
 Conta `jeanluis.dev@gmail.com`, projeto Central Simples (`prefab-clover-510801-h2`). O painel mantém a marca verificada/publicada e o acesso aos dados em análise. O progresso mostra página inicial, funcionalidade, marca e escopos mínimos concluídos. A etapa de política de privacidade apresentou dois problemas: ausência de identificação dos destinatários dos dados Google e de mecanismos de proteção dos dados sensíveis.

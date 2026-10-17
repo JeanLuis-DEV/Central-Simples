@@ -1,5 +1,7 @@
 # Google OAuth: marca aprovada e escopo em análise — 09/10/2026
 
+> Atualização de 17/10/2026: novo vídeo, política e acessos de revisão enviados na conversa Google; link e justificativa atualizados no Console. Marca aprovada e acesso aos dados ainda em análise. [Registro do complemento](REENVIO-VERIFICACAO-GOOGLE-2026-10-17.md). Os registros abaixo são históricos.
+
 > Atualização confirmada em 11/10/2026: marca aprovada, acesso aos dados ainda em análise. A equipe solicitou novo vídeo, acesso de teste e dois ajustes de privacidade. A política corrigida já está publicada; nenhum e-mail de resposta foi enviado. [Revisão e próximos passos](CORRECAO-PRIVACIDADE-GOOGLE-2026-10-11.md). As seções de 09/10 abaixo preservam o histórico da submissão.
 
 ## Resultado confirmado no painel
