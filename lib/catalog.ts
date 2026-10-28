@@ -21,7 +21,7 @@ export const apps = [
     description:
       "Clareza para o seu dinheiro. Tranquilidade para os seus próximos planos.",
     detail:
-      "Organize receitas, despesas e compromissos em um espaço só. Veja o que entra, o que sai e o que ainda precisa da sua atenção.",
+      "Organize receitas, despesas e compromissos em um só espaço. Crie perfis de gastos ilimitados, todo controle em sua mão.",
     features: [
       "Parcelamento de lançamentos",
       "Recorrências mensais",

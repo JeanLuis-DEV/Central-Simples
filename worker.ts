@@ -5,10 +5,15 @@
  * hashes and application data therefore stay in their original databases.
  */
 
+import type { DurableObjectNamespace } from "@cloudflare/workers-types";
+import { SESSION_SECONDS, type AuthCommand } from "./lib/central-auth-state";
+export { CentralAuthState } from "./lib/central-auth-state";
+
 type Assets = { fetch(request: Request): Promise<Response> };
 
 type Env = {
   ASSETS: Assets;
+  CENTRAL_AUTH?: DurableObjectNamespace;
   CENTRAL_ADMIN_USERNAME?: string;
   CENTRAL_ADMIN_PASSWORD_HASH?: string;
   CENTRAL_SESSION_SECRET?: string;
@@ -24,7 +29,6 @@ type TargetId = "ajudante" | "finorya" | "lingua-memory" | "meu-negocio";
 type TargetEnvKey = "AJUDANTE_APP_URL" | "FINORYA_APP_URL" | "LINGUA_MEMORY_APP_URL" | "MEU_NEGOCIO_APP_URL";
 
 const SESSION_COOKIE = "central_sid";
-const SESSION_SECONDS = 60 * 60 * 12;
 const MAX_BODY = 16_384;
 const TARGETS: Record<TargetId, { env: TargetEnvKey; label: string }> = {
   ajudante: { env: "AJUDANTE_APP_URL", label: "Ajudante Elétrico" },
@@ -98,29 +102,89 @@ function parseCookie(request: Request, name: string) {
     .find((part) => part.startsWith(`${name}=`))?.slice(name.length + 1) ?? null;
 }
 
-async function createSession(secret: string, username: string) {
-  const payload = base64url(JSON.stringify({ sub: username, exp: Date.now() + SESSION_SECONDS * 1000, nonce: base64url(crypto.getRandomValues(new Uint8Array(12))) }));
-  return `${payload}.${base64url(await hmac(secret, payload))}`;
+function hex(bytes: Uint8Array) {
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-async function validSession(request: Request, secret: string | undefined, username: string | undefined) {
-  if (!secret || secret.length < 32 || !username) return false;
+async function tokenHash(token: string) {
+  return hex(new Uint8Array(await crypto.subtle.digest("SHA-256", encoder.encode(token))));
+}
+
+async function authState(env: Env, command: AuthCommand) {
+  if (!env.CENTRAL_AUTH) throw new ApiError(503, "A autenticação da Central ainda não foi configurada.");
+  const state = env.CENTRAL_AUTH.get(env.CENTRAL_AUTH.idFromName("central-auth-v1"));
+  const response = await state.fetch("https://central-auth.internal/", {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(command),
+  });
+  if (!response.ok) throw new ApiError(503, "Não foi possível validar a sessão. Tente novamente.");
+  return response.json<{ retryAfter?: number; valid?: boolean; ok?: boolean }>();
+}
+
+async function credentialVersion(env: Env) {
+  return hex(await hmac(env.CENTRAL_SESSION_SECRET!, JSON.stringify([
+    "central-credentials-v1", env.CENTRAL_ADMIN_USERNAME, env.CENTRAL_ADMIN_PASSWORD_HASH,
+  ])));
+}
+
+async function limitLogin(request: Request, env: Env, username: string) {
+  // Cloudflare supplies CF-Connecting-IP at ingress. Forwarded headers are not
+  // trusted; without the edge header, all requests share a conservative bucket.
+  const ip = request.headers.get("cf-connecting-ip") || "unknown";
+  const knownAccount = username.toLowerCase() === env.CENTRAL_ADMIN_USERNAME!.toLowerCase();
+  const result = await authState(env, {
+    action: "attempt",
+    ipKey: hex(await hmac(env.CENTRAL_SESSION_SECRET!, `login-ip:${ip}`)),
+    accountKey: knownAccount ? hex(await hmac(env.CENTRAL_SESSION_SECRET!, `login-account:${username.toLowerCase()}`)) : null,
+  });
+  if (typeof result.retryAfter !== "number" || !Number.isFinite(result.retryAfter) || result.retryAfter < 0)
+    throw new ApiError(503, "Não foi possível validar o acesso. Tente novamente.");
+  if (result.retryAfter > 0) throw new ApiError(429, "Muitas tentativas. Aguarde antes de tentar novamente.", {
+    "Retry-After": String(Math.ceil(result.retryAfter)),
+  });
+}
+
+async function createSession(env: Env) {
+  const expiresAt = Date.now() + SESSION_SECONDS * 1000;
+  const payload = base64url(JSON.stringify({ sub: env.CENTRAL_ADMIN_USERNAME, exp: expiresAt, nonce: base64url(crypto.getRandomValues(new Uint8Array(32))) }));
+  const token = `${payload}.${base64url(await hmac(env.CENTRAL_SESSION_SECRET!, payload))}`;
+  const result = await authState(env, {
+    action: "create", tokenHash: await tokenHash(token), credentialVersion: await credentialVersion(env), expiresAt,
+  });
+  if (result.ok !== true) throw new ApiError(503, "Não foi possível iniciar a sessão. Tente novamente.");
+  return token;
+}
+
+async function validSession(request: Request, env: Env) {
+  const secret = env.CENTRAL_SESSION_SECRET;
+  if (!secret || secret.length < 32 || !env.CENTRAL_ADMIN_USERNAME || !env.CENTRAL_ADMIN_PASSWORD_HASH) return false;
   const token = parseCookie(request, SESSION_COOKIE);
-  if (!token) return false;
+  // Reject alternate encodings/suffixes so a token has exactly one registry key.
+  if (!token || token.length > 1024 || !/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}$/.test(token)) return false;
   const [payload, signature] = token.split(".");
-  if (!payload || !signature) return false;
   let decoded: { sub?: string; exp?: number };
   try {
     decoded = JSON.parse(new TextDecoder().decode(decodeBase64url(payload))) as { sub?: string; exp?: number };
   } catch {
     return false;
   }
-  if (decoded.sub !== username || !decoded.exp || decoded.exp <= Date.now()) return false;
+  if (!decoded || decoded.sub !== env.CENTRAL_ADMIN_USERNAME || !Number.isSafeInteger(decoded.exp) || !decoded.exp || decoded.exp <= Date.now()) return false;
   try {
-    return constantTimeEqual(decodeBase64url(signature), await hmac(secret, payload));
+    if (base64url(decodeBase64url(signature)) !== signature ||
+        !constantTimeEqual(decodeBase64url(signature), await hmac(secret, payload))) return false;
   } catch {
     return false;
   }
+  const result = await authState(env, {
+    action: "validate", tokenHash: await tokenHash(token), credentialVersion: await credentialVersion(env),
+  });
+  return result.valid === true;
+}
+
+async function revokeSession(request: Request, env: Env) {
+  const token = parseCookie(request, SESSION_COOKIE);
+  if (!token || token.length > 1024) return;
+  const result = await authState(env, { action: "revoke", tokenHash: await tokenHash(token) });
+  if (result.ok !== true) throw new ApiError(503, "Não foi possível encerrar a sessão. Tente novamente.");
 }
 
 function cookie(value: string, request: Request, maxAge = SESSION_SECONDS) {
@@ -153,14 +217,16 @@ async function readJson(request: Request) {
   let offset = 0;
   for (const chunk of chunks) { body.set(chunk, offset); offset += chunk.byteLength; }
   try {
-    return JSON.parse(new TextDecoder().decode(body)) as Record<string, unknown>;
+    const parsed: unknown = JSON.parse(new TextDecoder().decode(body));
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("Invalid object");
+    return parsed as Record<string, unknown>;
   } catch {
     throw new ApiError(400, "Dados inválidos.");
   }
 }
 
 class ApiError extends Error {
-  constructor(public status: number, message: string) { super(message); }
+  constructor(public status: number, message: string, public headers: HeadersInit = {}) { super(message); }
 }
 
 function targetId(value: unknown): TargetId {
@@ -218,7 +284,7 @@ async function callApplication(env: Env, id: TargetId, method: string, payload?:
 }
 
 async function requireAdmin(request: Request, env: Env) {
-  if (!(await validSession(request, env.CENTRAL_SESSION_SECRET, env.CENTRAL_ADMIN_USERNAME))) throw new ApiError(401, "Sua sessão terminou. Entre novamente.");
+  if (!(await validSession(request, env))) throw new ApiError(401, "Sua sessão terminou. Entre novamente.");
 }
 
 async function handleApi(request: Request, env: Env) {
@@ -229,19 +295,21 @@ async function handleApi(request: Request, env: Env) {
     return json({ apps: (Object.keys(TARGETS) as TargetId[]).map((id) => ({ id, name: TARGETS[id].label, connected: Boolean(targetUrl(env, id)) && (id !== "meu-negocio" || (env.MEU_NEGOCIO_INTEGRATION_SECRET?.length ?? 0) >= 32), available: id === "meu-negocio" ? Boolean(targetUrl(env, id)) && (env.MEU_NEGOCIO_INTEGRATION_SECRET?.length ?? 0) >= 32 : id !== "lingua-memory" || Boolean(targetUrl(env, id)) })) });
   }
   if (path === "/api/central/session/login" && request.method === "POST") {
-    if (!env.CENTRAL_ADMIN_USERNAME || !env.CENTRAL_ADMIN_PASSWORD_HASH || !env.CENTRAL_SESSION_SECRET || env.CENTRAL_SESSION_SECRET.length < 32) return json({ error: "A autenticação da Central ainda não foi configurada." }, 503);
+    if (!env.CENTRAL_AUTH || !env.CENTRAL_ADMIN_USERNAME || !env.CENTRAL_ADMIN_PASSWORD_HASH || !env.CENTRAL_SESSION_SECRET || env.CENTRAL_SESSION_SECRET.length < 32) return json({ error: "A autenticação da Central ainda não foi configurada." }, 503);
     const body = await readJson(request);
     const username = typeof body.username === "string" ? body.username.trim() : "";
     const password = typeof body.password === "string" ? body.password : "";
+    await limitLogin(request, env, username);
     if (!/^[a-zA-Z0-9][a-zA-Z0-9._@-]{2,63}$/.test(username) || password.length < 1 || password.length > 128 || username.toLowerCase() !== env.CENTRAL_ADMIN_USERNAME.toLowerCase() || !(await verifyPbkdf2(password, env.CENTRAL_ADMIN_PASSWORD_HASH))) return json({ error: "Login ou senha inválidos." }, 401);
-    const token = await createSession(env.CENTRAL_SESSION_SECRET, env.CENTRAL_ADMIN_USERNAME);
+    const token = await createSession(env);
     return json({ user: { username: env.CENTRAL_ADMIN_USERNAME } }, 200, { "Set-Cookie": cookie(token, request) });
   }
   if (path === "/api/central/session" && request.method === "GET") {
-    const authenticated = await validSession(request, env.CENTRAL_SESSION_SECRET, env.CENTRAL_ADMIN_USERNAME);
+    const authenticated = await validSession(request, env);
     return json({ user: authenticated ? { username: env.CENTRAL_ADMIN_USERNAME } : null });
   }
   if (path === "/api/central/session/logout" && request.method === "POST") {
+    await revokeSession(request, env);
     return json({ ok: true }, 200, { "Set-Cookie": cookie("", request, 0) });
   }
   if (!path.startsWith("/api/central/accounts")) return null;
@@ -253,6 +321,8 @@ async function handleApi(request: Request, env: Env) {
   const body = await readJson(request);
   const id = targetId(body.appId);
   delete body.appId;
+  // Reading a request body can overlap a logout in another tab.
+  await requireAdmin(request, env);
   return json(await callApplication(env, id, request.method, body), request.method === "POST" ? 201 : 200);
 }
 
@@ -263,7 +333,7 @@ const worker = {
       if (response) return withSecurityHeaders(response);
       return withSecurityHeaders(await env.ASSETS.fetch(request));
     } catch (error) {
-      if (error instanceof ApiError) return withSecurityHeaders(json({ error: error.message }, error.status));
+      if (error instanceof ApiError) return withSecurityHeaders(json({ error: error.message }, error.status, error.headers));
       console.error("Central API failure", error instanceof Error ? error.message : "Unknown error");
       return withSecurityHeaders(json({ error: "Serviço indisponível. Tente novamente." }, 503));
     }
@@ -274,6 +344,8 @@ export default worker;
 
 function withSecurityHeaders(response: Response) {
   const headers = new Headers(response.headers);
+  headers.set("Content-Security-Policy", "frame-ancestors 'none'");
+  headers.set("X-Frame-Options", "DENY");
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");

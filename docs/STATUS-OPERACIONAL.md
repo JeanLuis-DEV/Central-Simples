@@ -2,6 +2,12 @@
 
 Registro consolidado das evidências de 09/10 e da consulta Google de 11/10/2026. Em 11/10, a conta e o projeto corretos foram conferidos no painel e no Gmail; a política corrigida foi publicada. As demais evidências operacionais permanecem datadas, sem nova homologação financeira ou de backups. Relatórios de 02 a 07/10 preservam resultados históricos e não definem a configuração vigente.
 
+Atualização local de 12/10/2026: limite persistente de tentativas e revogação
+de sessões no logout corrigidos na Central. O novo binding `CENTRAL_AUTH`
+e sua migração estão preparados no código, ainda sem deploy. A descrição
+produtiva abaixo continua histórica. Publicação e verificações da Cloudflare
+serão tratadas na etapa seguinte. [Correções e testes](SEGURANCA-AUTENTICACAO-2026-10-12.md).
+
 ## Estado vigente
 
 Atualização de 17/10/2026: Meu Negócio publicado em domínio próprio e integrado

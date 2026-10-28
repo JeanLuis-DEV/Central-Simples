@@ -20,6 +20,25 @@ page.on("console", (message) => {
   if (message.type() === "error") errors.push(message.text());
 });
 try {
+  const allowedOrigin = new URL(process.env.TEST_URL || "http://127.0.0.1:5190")
+    .origin;
+  await page.route("**/*", (route) => {
+    const url = new URL(route.request().url());
+    if (url.origin === allowedOrigin) return route.continue();
+    // This browser environment injects this antivirus script; it is absent from
+    // the static export. Stub it locally instead of contacting its external host.
+    if (
+      url.hostname === "gc.kis.v2.scr.kaspersky-labs.com" &&
+      url.pathname.endsWith("/main.js") &&
+      route.request().resourceType() === "script"
+    )
+      return route.fulfill({
+        status: 200,
+        contentType: "application/javascript",
+        body: "",
+      });
+    return route.abort();
+  });
   await page.goto(process.env.TEST_URL || "http://127.0.0.1:5190", {
     waitUntil: "networkidle",
   });
@@ -53,30 +72,19 @@ try {
       ),
     );
   }
-  for (const name of ["Finorya", "Ajudante Elétrico", "Meu Negócio", "Lingua Memory"]) {
-    const trigger = page.getByRole("button", {
+  for (const [name, destination] of [
+    ["Finorya", appUrls.finorya],
+    ["Ajudante Elétrico", appUrls.ajudante],
+    ["Meu Negócio", appUrls.negocio],
+    ["Lingua Memory", appUrls.lingua],
+  ]) {
+    const link = page.getByRole("link", {
       name: `Conhecer ${name}`,
       exact: true,
     });
-    await trigger.click();
-    const dialog = page.getByRole("dialog");
-    await dialog.waitFor();
-    assert.equal(await dialog.getByRole("heading").innerText(), name);
-    assert.ok(
-      await dialog
-        .getByRole("link", { name: /Abrir aplicativo/ })
-        .getAttribute("href"),
-    );
-    await page.keyboard.press("Escape");
-    await dialog.waitFor({ state: "hidden" });
-    await page.waitForFunction(
-      (label) => document.activeElement?.getAttribute("aria-label") === label,
-      `Conhecer ${name}`,
-    );
-    assert.equal(
-      await trigger.evaluate((element) => element === document.activeElement),
-      true,
-    );
+    assert.equal(await link.getAttribute("href"), destination);
+    assert.equal(await link.getAttribute("target"), "_blank");
+    assert.equal(await link.getAttribute("rel"), "noopener noreferrer");
   }
   await page.getByRole("button", { name: "Acessar apps", exact: true }).click();
   const access = page.getByRole("dialog");
@@ -131,7 +139,7 @@ try {
       fullPage: true,
     });
     await page
-      .getByRole("button", { name: "Conhecer Finorya", exact: true })
+      .getByRole("button", { name: "Acessar apps", exact: true })
       .click();
     const bounds = await page.getByRole("dialog").boundingBox();
     assert.ok(
@@ -145,7 +153,7 @@ try {
   }
   assert.deepEqual(errors, []);
   console.log(
-    "OK: catálogo, telas mobile, diálogos, teclado, imagens e layouts desktop/mobile.",
+    "OK: catálogo, links diretos das landing pages, telas mobile, diálogo de acesso, teclado, imagens e layouts desktop/mobile.",
   );
 } finally {
   await browser.close();

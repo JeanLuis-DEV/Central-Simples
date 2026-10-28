@@ -5,6 +5,22 @@
   "account_id": "38d9280689f97dc0bceca08c3ee94507",
   "compatibility_date": "2026-05-15",
   "workers_dev": true,
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CENTRAL_AUTH",
+        "class_name": "CentralAuthState"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1-central-auth",
+      "new_sqlite_classes": [
+        "CentralAuthState"
+      ]
+    }
+  ],
   "assets": {
     "directory": "./out",
     "binding": "ASSETS",

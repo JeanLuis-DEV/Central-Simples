@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:browser": "node tests/browser.mjs",
-    "test:worker": "node --experimental-transform-types --test tests/central-worker.test.mjs",
+    "test:worker": "node --test tests/central-worker.test.mjs tests/central-auth-state.test.mjs",
+    "test:admin-browser": "node tests/central-admin-browser.mjs",
     "build:cloudflare": "node scripts/build-cloudflare.mjs",
     "deploy:cloudflare": "wrangler deploy"
   },
@@ -23,11 +24,14 @@
     "react-dom": "19.2.6"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "4.20260515.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "esbuild": "0.27.3",
     "eslint": "9.39.4",
     "eslint-config-next": "16.3.4",
+    "miniflare": "4.20260515.0",
     "playwright": "1.62.1",
     "typescript": "5.9.3",
     "wrangler": "4.92.0"

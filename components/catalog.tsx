@@ -6,12 +6,9 @@ import {
   ArrowRight,
   ArrowUpRight,
   BookOpen,
-  Check,
   Grid2X2,
   LayoutGrid,
-  MonitorSmartphone,
   ShieldCheck,
-  Sparkles,
   Store,
   X,
   Zap,
@@ -50,7 +47,6 @@ export default function Catalog() {
   function rememberTrigger() {
     trigger.current = document.activeElement as HTMLElement | null;
   }
-  const [selected, setSelected] = useState<CatalogApp | null>(null);
   const [access, setAccess] = useState(false);
   return (
     <>
@@ -60,11 +56,6 @@ export default function Catalog() {
       <header className="site-header">
         <div className="wrap header-inner">
           <Brand />
-          <nav aria-label="Navegação principal">
-            <a href="#aplicativos">Aplicativos</a>
-            <a href="#sobre">Sobre a Central</a>
-            <a href="/area-restrita">Administração</a>
-          </nav>
           <button
             className="button header-access"
             onClick={() => {
@@ -81,9 +72,6 @@ export default function Catalog() {
       <main id="conteudo">
         <section id="inicio" className="wrap hero">
           <div className="hero-copy">
-            <p className="eyebrow">
-              <span /> UMA CENTRAL. VÁRIAS POSSIBILIDADES.
-            </p>
             <h1>
               Seu dia mais simples.
               <br />
@@ -92,21 +80,12 @@ export default function Catalog() {
                 <span className="hero-title-line">num só lugar.</span>
               </em>
             </h1>
-            <p className="lead">
-              Ferramentas feitas para facilitar sua rotina.
-              <br className="desktop-break" /> Escolha o aplicativo que combina
-              com você e cuide do que importa.
-            </p>
             <div className="hero-actions">
               <a className="button primary" href="#aplicativos">
                 Encontrar meu aplicativo
                 <ArrowRight size={18} />
               </a>
             </div>
-            <p className="hero-note">
-              <Check size={15} />
-              Simples de usar. Feitos para a vida real.
-            </p>
           </div>
           <div
             className="hero-visual mobile-showcase"
@@ -145,32 +124,12 @@ export default function Catalog() {
             <div>
               <h2>
                 Escolha o seu app.
-                <br />
-                <span>Simplifique a sua rotina.</span>
               </h2>
             </div>
           </div>
           <div className="app-grid" aria-label="Catálogo de aplicativos">
             {apps.map((app) => (
               <article className="app-card" key={app.id}>
-                <div className="card-image">
-                  <div className="card-image-bar">
-                    <span className="window-dots">
-                      <i />
-                      <i />
-                      <i />
-                    </span>
-                    <span>{app.name}</span>
-                    <MonitorSmartphone size={13} />
-                  </div>
-                  <Image
-                    src={app.image}
-                    alt={`Visão do aplicativo ${app.name}`}
-                    width={app.width}
-                    height={app.height}
-                    unoptimized
-                  />
-                </div>
                 <div className="card-content">
                   <div className="card-heading">
                     <AppIcon app={app} />
@@ -184,26 +143,18 @@ export default function Catalog() {
                       Disponível
                     </span>
                   </div>
-                  <ul className="feature-tags">
-                    {balanceFeatures(app.features).map((feature) => (
-                      <li key={feature}>
-                        <Check size={13} />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="card-description">{app.detail}</p>
                   <div className="card-actions">
-                    <button
+                    <a
                       className="button primary"
-                      onClick={() => {
-                        rememberTrigger();
-                        setSelected(app);
-                      }}
+                      href={app.site}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       aria-label={`Conhecer ${app.name}`}
                     >
                       Conhecer aplicativo
                       <ArrowRight size={17} />
-                    </button>
+                    </a>
                     <a
                       className="button secondary"
                       href={`${app.site}/login`}
@@ -218,60 +169,20 @@ export default function Catalog() {
               </article>
             ))}
           </div>
-          <p className="catalog-note">
-            <Sparkles size={15} />
-            Esta é só a primeira página da nossa história. Novas ferramentas
-            virão.
-          </p>
-        </section>
-        <section id="sobre" className="wrap about-section">
-          <div className="about-symbol" aria-hidden="true">
-            <Grid2X2 size={47} />
-          </div>
-          <div>
-            <p className="eyebrow">ESSA É A NOSSA IDEIA</p>
-            <h2>
-              Várias ferramentas.
-              <br />
-              <em>Uma mesma forma de pensar.</em>
-            </h2>
-            <p>
-              A Central Simples reúne aplicativos com uma proposta em comum:
-              transformar tarefas do dia a dia em experiências mais claras,
-              organizadas e fáceis de usar.
-            </p>
-          </div>
-          <a href="#aplicativos" className="text-link">
-            Conheça os aplicativos
-            <ArrowRight size={18} />
-          </a>
         </section>
       </main>
       <footer className="wrap footer">
-        <Brand />
-        <p>Aplicativos simples. Possibilidades de sobra.</p>
         <div>
-          <a href="#aplicativos">Aplicativos</a>
-          <a href="#sobre">Sobre a Central</a>
           <a href="/area-restrita">Administração</a>
           <a href="/privacidade">Privacidade</a>
           <a href="/termos">Termos de uso</a>
-          <button
-            onClick={() => {
-              rememberTrigger();
-              setAccess(true);
-            }}
-          >
-            Acessar
-          </button>
         </div>
-        <small>© 2026 Central Simples</small>
+        <small>© 2026 Central Simples. Todos os direitos reservados.</small>
       </footer>
       <Dialog.Root
-        open={!!selected || access}
+        open={access}
         onOpenChange={(open: boolean) => {
           if (!open) {
-            setSelected(null);
             setAccess(false);
           }
         }}
@@ -283,63 +194,12 @@ export default function Catalog() {
               event.preventDefault();
               trigger.current?.focus();
             }}
-            className={`dialog-content ${selected ? "product-dialog" : "access-dialog"}`}
+            className="dialog-content access-dialog"
           >
             <Dialog.Close className="close-button" aria-label="Fechar">
               <X size={21} />
             </Dialog.Close>
-            {selected ? (
-              <>
-                <div className="dialog-product-heading">
-                  <AppIcon app={selected} />
-                  <div>
-                    <p className="eyebrow">{selected.category}</p>
-                    <Dialog.Title>{selected.name}</Dialog.Title>
-                  </div>
-                </div>
-                <Dialog.Description className="dialog-description">
-                  {selected.detail}
-                </Dialog.Description>
-                <Image
-                  className="detail-image"
-                  src={selected.image}
-                  alt={`Tela do ${selected.name}`}
-                  width={selected.width}
-                  height={selected.height}
-                  unoptimized
-                />
-                <ul className="detail-features">
-                  {selected.features.map((feature) => (
-                    <li key={feature}>
-                      <Check size={16} />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <div className="detail-actions">
-                  <a
-                    className="button primary"
-                    href={selected.site}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {selected.id === "lingua-memory"
-                      ? "Começar a estudar grátis"
-                      : "Conhecer planos e teste grátis"}
-                    <ArrowUpRight size={17} />
-                  </a>
-                  <a
-                    className="button secondary"
-                    href={`${selected.site}/login`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Abrir aplicativo
-                    <ArrowRight size={17} />
-                  </a>
-                </div>
-              </>
-            ) : (
+
               <>
                 <span className="access-symbol">
                   <LayoutGrid size={25} />
@@ -371,21 +231,9 @@ export default function Catalog() {
                   Cada aplicativo mantém sua própria conta e seus dados.
                 </p>
               </>
-            )}
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
     </>
   );
-}
-
-// Alternate longer and shorter labels so each row mixes text lengths.
-function balanceFeatures(features: readonly string[]) {
-  const remaining = [...features].sort((a, b) => b.length - a.length);
-  const balanced: string[] = [];
-  while (remaining.length) {
-    balanced.push(remaining.shift()!);
-    if (remaining.length) balanced.push(remaining.pop()!);
-  }
-  return balanced;
 }
